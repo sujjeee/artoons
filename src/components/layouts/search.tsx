@@ -9,13 +9,12 @@ import { Input } from "@/components/ui/input"
 export function Search() {
   return (
     <div className="max-w-xl w-full mx-auto flex flex-col space-y-12 items-center justify-center">
-      <Button
-        variant="outline"
-        size="icon"
-        className="rounded-full size-12 shadow-none pointer-events-none"
-      >
+      {/* <Button variant="outline" className="shadow-none pointer-events-none"> */}
+      <div className="flex items-center justify-center">
+        <div className="font-medium font-sans text-lg mr-2">TinyTots</div>
         <Emoji />
-      </Button>
+      </div>
+      {/* </Button> */}
       <div className="relative flex items-center w-full">
         <Input
           placeholder="Search for image"

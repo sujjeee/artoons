@@ -1,6 +1,7 @@
 import React from "react"
+import { Icons } from "../icons"
 
-export function ImagesShell() {
+export function Images() {
   const data = [
     {
       image:
@@ -544,66 +545,98 @@ export function ImagesShell() {
     },
   ]
   return (
-    <section className="sm:container sm:max-w-screen-lg flex items-center justify-center">
-      <div className="list-none space-y-2 sm:block sm:columns-2 sm:gap-2 lg:columns-5 pb-28">
-        {data.map((item, idx) => (
-          <div
-            key={idx}
-            className="rounded-xl text-left overflow-hidden shadow-sm"
-          >
-            <figure className="my-0 flex w-full flex-none flex-col rounded-xl bg-gray-50 p-2 pb-2 dark:bg-gray-900 sm:w-48 lg:w-52 2xl:w-56">
-              <div aria-label="View Image" role="button" className="w-full">
-                <img
-                  alt=""
-                  src={item.image}
-                  className="m-0 w-full rounded-xl object-cover object-top sm:h-48 sm:w-48 lg:h-52 lg:w-52 2xl:h-56 2xl:w-56"
-                />
-              </div>{" "}
-              <figcaption className="mt-0 px-0 py-0">
-                <dl className="mt-2 rounded-xl p-1">
-                  <dt className="relative flex select-none items-center justify-start gap-1 text-xs text-gray-400">
-                    Prompt
-                    <button
-                      type="button"
-                      title="Copy to clipboard"
-                      className="relative rounded p-1 hover:bg-gray-100 dark:hover:bg-gray-800/60 inline-flex cursor-pointer items-center text-sm focus:outline-none  mx-0.5   text-gray-600 "
-                    >
-                      <svg
-                        viewBox="0 0 32 32"
-                        preserveAspectRatio="xMidYMid meet"
-                        height="1em"
-                        width="1em"
-                        role="img"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        className=""
-                        focusable="false"
-                      >
-                        <path
-                          transform="translate(0)"
-                          d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z"
-                        ></path>
-                        <path
-                          transform="translate(0)"
-                          d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z"
-                        ></path>
-                        <rect height="32" width="32" fill="none"></rect>
-                      </svg>{" "}
-                    </button>{" "}
-                  </dt>
-                  <dd
-                    title="a girl wandering through the forest"
-                    className="line-clamp-5 text-sm text-gray-800"
-                  >
-                    {item.prompt}
-                  </dd>
-                </dl>{" "}
-              </figcaption>
-            </figure>{" "}
+    <section className=" grid sm:gap-2 sm:grid-cols-2 lg:grid-cols-5">
+      {data.map((image, idx) => (
+        <div key={idx} className="rounded-2xl overflow-hidden shadow-sm">
+          <div className="flex w-full flex-col rounded-xl bg-gray-50 p-2 pb-2">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              alt={image.prompt}
+              src={image.image}
+              className="rounded-xl object-cover object-top size-full"
+            />
+            <div className="mt-2 rounded-xl p-1">
+              <div className="relative flex select-none items-center justify-start gap-1 text-xs text-gray-400">
+                Prompt
+                <button
+                  type="button"
+                  title="Copy to clipboard"
+                  className="relative rounded p-1 hover:bg-gray-100 dark:hover:bg-gray-800/60 inline-flex cursor-pointer items-center text-sm focus:outline-none  mx-0.5   text-gray-600 "
+                >
+                  <Icons.copy className="size-4 text-gray-600" />
+                </button>
+              </div>
+              <div className="line-clamp-5 prose prose-zinc dark:prose-invert text-sm text-pretty font-me">
+                {image.prompt}
+              </div>
+            </div>
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </section>
   )
 }
+
+{
+  /* <section className="sm:container sm:max-w-screen-lg flex items-center justify-center">
+    //   <div className="list-none space-y-2 sm:block sm:columns-2 sm:gap-2 lg:columns-5 pb-28">
+    //     {data.map((item, idx) => ( */
+}
+//       <div
+//         key={idx}
+//         className="rounded-xl text-left overflow-hidden shadow-sm"
+//       >
+//         <figure className="my-0 flex w-full flex-none flex-col rounded-xl bg-gray-50 p-2 pb-2 dark:bg-gray-900 sm:w-48 lg:w-52 2xl:w-56">
+//           <div aria-label="View Image" role="button" className="w-full">
+//             <img
+//               alt=""
+//               src={item.image}
+//               className="m-0 w-full rounded-xl object-cover object-top sm:h-48 sm:w-48 lg:h-52 lg:w-52 2xl:h-56 2xl:w-56"
+//             />
+//           </div>{" "}
+//           <figcaption className="mt-0 px-0 py-0">
+//             <dl className="mt-2 rounded-xl p-1">
+//               <dt className="relative flex select-none items-center justify-start gap-1 text-xs text-gray-400">
+//                 Prompt
+//                 <button
+//                   type="button"
+//                   title="Copy to clipboard"
+//                   className="relative rounded p-1 hover:bg-gray-100 dark:hover:bg-gray-800/60 inline-flex cursor-pointer items-center text-sm focus:outline-none  mx-0.5   text-gray-600 "
+//                 >
+//                   <svg
+//                     viewBox="0 0 32 32"
+//                     preserveAspectRatio="xMidYMid meet"
+//                     height="1em"
+//                     width="1em"
+//                     role="img"
+//                     fill="currentColor"
+//                     aria-hidden="true"
+//                     xmlns="http://www.w3.org/2000/svg"
+//                     className=""
+//                     focusable="false"
+//                   >
+//                     <path
+//                       transform="translate(0)"
+//                       d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z"
+//                     ></path>
+//                     <path
+//                       transform="translate(0)"
+//                       d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z"
+//                     ></path>
+//                     <rect height="32" width="32" fill="none"></rect>
+//                   </svg>{" "}
+//                 </button>{" "}
+//               </dt>
+//               <dd
+//                 title="a girl wandering through the forest"
+//                 className="line-clamp-5 text-sm text-gray-800"
+//               >
+//                 {item.prompt}
+//               </dd>
+//             </dl>{" "}
+//           </figcaption>
+//         </figure>{" "}
+//       </div>
+//     ))}
+//   </div>
+// </section>

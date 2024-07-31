@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils"
 import { GeistMono } from "geist/font/mono"
 import { GeistSans } from "geist/font/sans"
 import { Providers } from "@/components/providers"
+import { Header } from "@/components/layouts/header"
 
 export default function RootLayout({
   children,
@@ -18,7 +19,12 @@ export default function RootLayout({
           GeistMono.variable,
         )}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          <div className="container max-w-screen-xl">
+            <Header />
+            {children}
+          </div>
+        </Providers>
       </body>
     </html>
   )

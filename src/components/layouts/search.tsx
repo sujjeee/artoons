@@ -2,18 +2,17 @@
 
 import { Emoji } from "@/components/emojis"
 import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
 import { ArrowRightIcon } from "@radix-ui/react-icons"
 import React from "react"
-import { Input } from "./ui/input"
+import { Input } from "@/components/ui/input"
 
-export default function HeroShell() {
+export function Search() {
   return (
     <div className="max-w-xl w-full mx-auto flex flex-col space-y-12 items-center justify-center">
       <Button
         variant="outline"
         size="icon"
-        className=" rounded-full size-12 shadow-none"
+        className="rounded-full size-12 shadow-none pointer-events-none"
       >
         <Emoji />
       </Button>

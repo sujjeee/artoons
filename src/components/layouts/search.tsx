@@ -19,7 +19,7 @@ export function Search() {
       <SearchInput
         placeholder="Search for anything"
         spellCheck={false}
-        className="h-12 bg-muted rounded-full text-sm w-full"
+        className="h-12 bg-gray-50  rounded-full text-sm w-full"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value || null)}
       />

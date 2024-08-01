@@ -5,7 +5,7 @@ import React from "react"
 export default function Page() {
   return (
     <>
-      <div className="py-36  hidden sm:flex">
+      <div className="py-36 hidden sm:flex">
         <Search />
       </div>
       <Images />

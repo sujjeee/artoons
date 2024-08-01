@@ -11,7 +11,7 @@ export function Search() {
     <div className="max-w-xl w-full mx-auto flex flex-col space-y-12 items-center justify-center">
       {/* <Button variant="outline" className="shadow-none pointer-events-none"> */}
       <div className="flex items-center justify-center">
-        <div className="font-medium font-sans text-lg mr-2">TinyTots</div>
+        <div className="font-semibold text-lg mr-2">Artoons</div>
         <Emoji />
       </div>
       {/* </Button> */}

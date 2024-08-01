@@ -1,3 +1,4 @@
+import { Footer } from "@/components/footer"
 import { Images } from "@/components/layouts/images"
 import { Search } from "@/components/layouts/search"
 import React from "react"
@@ -5,10 +6,10 @@ import React from "react"
 export default function Page() {
   return (
     <>
-      <div className="py-28">
+      <div className="py-36  hidden sm:flex">
         <Search />
       </div>
-      <div className="pt-14">
+      <div className="">
         <Images />
       </div>
     </>

@@ -1,35 +1,28 @@
 "use client"
 
-import { Emoji } from "@/components/emojis"
-import { Button } from "@/components/ui/button"
-import { ArrowRightIcon } from "@radix-ui/react-icons"
 import React from "react"
-import { Input } from "@/components/ui/input"
+import { Emoji } from "@/components/emojis"
+import { SearchInput } from "@/components/ui/search-input"
+import { useQueryState } from "nuqs"
 
 export function Search() {
+  const [searchQuery, setSearchQuery] = useQueryState("query", {
+    defaultValue: "",
+  })
+
   return (
     <div className="max-w-xl w-full mx-auto flex flex-col space-y-12 items-center justify-center">
-      {/* <Button variant="outline" className="shadow-none pointer-events-none"> */}
       <div className="flex items-center justify-center">
         <div className="font-semibold text-lg mr-2">Artoons</div>
         <Emoji />
       </div>
-      {/* </Button> */}
-      <div className="relative flex items-center w-full">
-        <Input
-          placeholder="Search for image"
-          spellCheck={false}
-          className="h-12 bg-muted rounded-full text-sm "
-        />
-        <Button
-          type="submit"
-          size={"icon"}
-          variant={"ghost"}
-          className="absolute right-2 top-1/2 transform -translate-y-1/2"
-        >
-          <ArrowRightIcon className="size-5 text-muted-foreground" />
-        </Button>
-      </div>
+      <SearchInput
+        placeholder="Search for anything"
+        spellCheck={false}
+        className="h-12 bg-muted rounded-full text-sm w-full"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value || null)}
+      />
     </div>
   )
 }

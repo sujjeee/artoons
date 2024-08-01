@@ -1,5 +1,8 @@
+"use client"
+
 import React from "react"
 import { Icons } from "../icons"
+import { CheckIcon } from "lucide-react"
 
 export function Images() {
   const data = [
@@ -544,6 +547,18 @@ export function Images() {
       prompt: "Stressed girl studying.",
     },
   ]
+
+  const [hasCheckIcon, setHasCheckIcon] = React.useState(false)
+
+  const onCopy = (prompt: string) => {
+    navigator.clipboard.writeText(prompt)
+    setHasCheckIcon(true)
+
+    setTimeout(() => {
+      setHasCheckIcon(false)
+    }, 1000)
+  }
+
   return (
     <section className=" grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 ">
       {data.map((image, idx) => (
@@ -562,8 +577,13 @@ export function Images() {
                   type="button"
                   title="Copy to clipboard"
                   className="relative rounded p-1 hover:bg-gray-100 dark:hover:bg-gray-800/60 inline-flex cursor-pointer items-center text-sm focus:outline-none  mx-0.5   text-gray-600 "
+                  onClick={() => onCopy(image.prompt)}
                 >
-                  <Icons.copy className="size-4 text-gray-600" />
+                  {hasCheckIcon ? (
+                    <CheckIcon className="size-3.5 text-neutral-600" />
+                  ) : (
+                    <Icons.copy className="size-3.5 text-gray-600" />
+                  )}
                 </button>
               </div>
               <p className="text-sm truncate">{image.prompt}</p>

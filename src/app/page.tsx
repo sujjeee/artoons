@@ -1,13 +1,15 @@
-import getImages from "@/actions/images"
+import { getImages } from "@/actions/images"
 import { SearchSections } from "@/components/sections/search-section"
-import React from "react"
+import { SearchParams } from "@/types"
 
-export default async function Page() {
-  const images = await getImages()
+export interface HomePageProps {
+  searchParams: SearchParams
+}
 
+export default async function HomePage({ searchParams }: HomePageProps) {
   return (
     <div className="py-36">
-      <SearchSections images={images} />
+      <SearchSections />
     </div>
   )
 }

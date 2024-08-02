@@ -5,8 +5,13 @@ import { Emoji } from "@/components/emojis"
 import { SearchInput } from "@/components/ui/search-input"
 import { useQueryState } from "nuqs"
 import { ImagesSection } from "@/components/sections/images-section"
+import { GetImageType } from "@/actions/images"
 
-export function SearchSections() {
+interface SearchSectionsProps {
+  images: GetImageType
+}
+
+export function SearchSections({ images }: SearchSectionsProps) {
   const [searchQuery, setSearchQuery] = useQueryState("query", {
     defaultValue: "",
   })
@@ -29,7 +34,7 @@ export function SearchSections() {
         </div>
       </div>
       <div className="pt-36">
-        <ImagesSection />
+        <ImagesSection images={images} />
       </div>
     </div>
   )

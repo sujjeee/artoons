@@ -4,7 +4,7 @@ import React from "react"
 import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { useImageStore } from "@/lib/store/use-image"
-import { cn } from "@/lib/utils"
+import { cn, getIdFromUrl } from "@/lib/utils"
 import { CheckIcon } from "lucide-react"
 
 interface ImageCardProps {
@@ -32,29 +32,10 @@ export function ImageCard({
     }, 1000)
   }
 
-  async function onDownload() {
-    if (imgUrl) {
-      try {
-        const response = await fetch(imgUrl)
-        const blob = await response.blob()
-        const url = window.URL.createObjectURL(blob)
-
-        const link = document.createElement("a")
-        link.href = url
-        link.download = prompt ?? "image.jpg" // You can set a default name if prompt is not available
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-
-        window.URL.revokeObjectURL(url)
-      } catch (error) {
-        console.error("Error downloading image:", error)
-      }
-    }
-  }
-
   async function onShare() {
-    const response = await fetch(imgUrl!)
+    if (!imgUrl) return alert("No image url found!")
+
+    const response = await fetch(`/download/${getIdFromUrl(imgUrl)}`)
     const blob = await response.blob()
 
     const filesArray = [
@@ -88,7 +69,6 @@ export function ImageCard({
             }}
           />
         )}
-
         <div className="mt-2 rounded-xl p-1 ">
           <div className="flex w-full items-center justify-between">
             <div className="relative flex items-center justify-start gap-1 text-xs text-gray-400">
@@ -107,16 +87,18 @@ export function ImageCard({
                 )}
               </Button>
             </div>
-            {isShareable && (
+            {imgUrl && isShareable && (
               <div className="items-center justify-center flex gap-1.5 text-gray-600">
                 <Button
                   variant={"ghost"}
                   size={"icon"}
                   title="Download"
                   className="size-5 p-0.5 animate-jelly"
-                  onClick={onDownload}
                 >
-                  <Icons.download className="size-3.5 text-muted-foreground" />
+                  <a href={`/download/${getIdFromUrl(imgUrl)}`}>
+                    {" "}
+                    <Icons.download className="size-3.5 text-muted-foreground" />
+                  </a>
                 </Button>
                 <Button
                   variant={"ghost"}

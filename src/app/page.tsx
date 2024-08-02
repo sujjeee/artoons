@@ -1,10 +1,13 @@
+import getImages from "@/actions/images"
 import { SearchSections } from "@/components/sections/search-section"
 import React from "react"
 
-export default function Page() {
+export default async function Page() {
+  const images = await getImages()
+
   return (
     <div className="py-36">
-      <SearchSections />
+      <SearchSections images={images} />
     </div>
   )
 }

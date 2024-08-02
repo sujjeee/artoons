@@ -4,22 +4,21 @@ import { images } from "./schemas"
 async function seedData() {
   const fakeData = [
     {
-      image:
-        "https://tiny-little-illustrations.pages.dev/_ipx/_/illustrations/aeroplane.jpeg",
-      prompt: "Aeroplane in flight lorem ipsum dolor sit amet.",
+      id: "01iyv3ol7a",
+      prompt: "Girl using a laptop",
     },
   ]
 
   await Promise.all(
     fakeData.map(async (image) => {
       await db.insert(images).values({
+        id: image.id,
         prompt: image.prompt,
-        url: image.image,
       })
     }),
   )
 
-  console.log("Data seeded successfully")
+  console.log("DataBase seeded successfully!")
 }
 
 seedData().catch(console.error)

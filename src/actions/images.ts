@@ -13,7 +13,6 @@ interface GetImagesProps {
 export async function getImages({ cursor }: GetImagesProps) {
   try {
     // parse search queries
-
     const pageAsNumber = Number(cursor)
     const fallbackPage =
       Number.isNaN(pageAsNumber) || pageAsNumber < 1 ? 1 : pageAsNumber

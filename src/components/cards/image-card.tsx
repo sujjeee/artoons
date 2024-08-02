@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { useImageStore } from "@/lib/store/use-image"
 import { cn, getIdFromUrl } from "@/lib/utils"
 import { CheckIcon } from "lucide-react"
+import Image from "next/image"
 
 interface ImageCardProps {
   imgUrl: string | null
@@ -22,6 +23,7 @@ export function ImageCard({
 }: ImageCardProps) {
   const { setData } = useImageStore()
   const [hasCheckIcon, setHasCheckIcon] = React.useState(false)
+  const [isImageLoading, setIsImageLoading] = React.useState(true)
 
   function onCopy() {
     navigator.clipboard.writeText(prompt ?? "")
@@ -32,43 +34,69 @@ export function ImageCard({
     }, 1000)
   }
 
+  let isSharing = false
+
   async function onShare() {
+    if (isSharing) return
+
     if (!imgUrl) return alert("No image url found!")
 
-    const response = await fetch(`/download/${getIdFromUrl(imgUrl)}`)
-    const blob = await response.blob()
+    isSharing = true
 
-    const filesArray = [
-      new File([blob], "meme.jpg", {
-        type: "image/jpeg",
-        lastModified: new Date().getTime(),
-      }),
-    ]
+    try {
+      const response = await fetch(`/download/${getIdFromUrl(imgUrl)}`)
+      const blob = await response.blob()
 
-    const shareData = {
-      files: filesArray,
+      const filesArray = [
+        new File([blob], "meme.jpg", {
+          type: "image/jpeg",
+          lastModified: new Date().getTime(),
+        }),
+      ]
+
+      const shareData = {
+        files: filesArray,
+      }
+
+      await navigator.share(shareData)
+    } catch (error) {
+      console.error("Error sharing:", error)
+      alert("Failed to share the image.")
+    } finally {
+      isSharing = false
     }
-
-    navigator.share(shareData)
   }
 
   return (
-    <div className="rounded-2xl overflow-hidden shadow-sm ">
+    <div className="rounded-2xl overflow-hidden shadow-sm">
       <div className="flex w-full flex-col rounded-xl bg-gray-50 p-2 pb-2">
         {prompt && imgUrl && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            alt={prompt}
-            src={imgUrl}
-            className="rounded-xl object-cover object-top size-full cursor-pointer"
+          <div
+            className="aspect-[1] size-full cursor-pointer select-none"
             onClick={() => {
               setData({
                 imagePrompt: prompt,
                 imageUrl: imgUrl,
               })
             }}
-          />
+          >
+            <Image
+              alt={prompt}
+              src={imgUrl}
+              loading="lazy"
+              width={100}
+              height={100}
+              className={cn(
+                "rounded-xl object-cover object-top size-full pointer-events-none",
+                {
+                  "blur-md": isImageLoading,
+                },
+              )}
+              onLoad={() => setIsImageLoading(false)}
+            />
+          </div>
         )}
+
         <div className="mt-2 rounded-xl p-1 ">
           <div className="flex w-full items-center justify-between">
             <div className="relative flex items-center justify-start gap-1 text-xs text-gray-400">

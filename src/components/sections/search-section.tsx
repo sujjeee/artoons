@@ -8,9 +8,6 @@ import { ImagesSection } from "@/components/sections/images-section"
 import { getImages } from "@/actions/images"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { useInView } from "react-intersection-observer"
-import ImageSkeleton from "../image-skeleton"
-import { asleep } from "@/lib/utils"
-import { Skeleton } from "../ui/skeleton"
 
 export function SearchSections() {
   const { ref, inView } = useInView()
@@ -20,7 +17,7 @@ export function SearchSections() {
   })
 
   const fetchProjects = async ({ pageParam }: { pageParam: any }) => {
-    // await asleep(2000)
+    console.log({ pageParam })
     const data = await getImages({
       cursor: pageParam ?? 0,
     })
@@ -34,11 +31,10 @@ export function SearchSections() {
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
       const nextPage = allPages.length + 1
-      return nextPage
+      return nextPage <= lastPage.pageCount ? nextPage : undefined
     },
   })
 
-  console.log("data", data, hasNextPage)
   React.useEffect(() => {
     if (inView && hasNextPage) {
       fetchNextPage()
@@ -65,14 +61,8 @@ export function SearchSections() {
         </div>
       </div>
       <div className="pt-36">
-        <ImagesSection images={images} />
+        <ImagesSection images={images} ref={ref} hasNextPage={hasNextPage} />
       </div>
-      <div ref={ref} />
-      <section className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 w-full pt-2">
-        {Array.from({ length: 10 }).map((_, idx) => (
-          <Skeleton key={idx} className="aspect-[0.8] rounded-xl" />
-        ))}
-      </section>
     </div>
   )
 }

@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og"
+
 export const runtime = "edge"
 
 export const size = {
@@ -11,7 +12,6 @@ export const contentType = "image/png"
 export default function Icon() {
   return new ImageResponse(
     (
-      // ImageResponse JSX element
       <div
         style={{
           fontSize: 24,

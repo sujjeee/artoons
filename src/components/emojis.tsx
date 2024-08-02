@@ -1,7 +1,7 @@
 "use client"
 
 import type { ComponentProps } from "react"
-import { useEffect, useState } from "react"
+import React from "react"
 
 const EMOJI = [
   "🤹",
@@ -42,9 +42,9 @@ function getRandomEmoji(exclude?: string) {
 }
 
 export function Emoji(props: ComponentProps<"span">) {
-  const [emoji, setEmoji] = useState(EMOJI[0])
+  const [emoji, setEmoji] = React.useState(EMOJI[0])
 
-  useEffect(() => {
+  React.useEffect(() => {
     const interval = window.setInterval(() => {
       setEmoji((emoji) => getRandomEmoji(emoji))
     }, 500)

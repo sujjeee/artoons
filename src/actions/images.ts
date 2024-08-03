@@ -2,15 +2,14 @@
 
 import { db } from "@/db"
 import { images } from "@/db/schemas"
-import { searchImagesSchema } from "@/lib/validations"
-import { SearchParams } from "@/types"
 import { desc, sql } from "drizzle-orm"
 
 interface GetImagesProps {
   cursor: string
+  query?: string
 }
 
-export async function getImages({ cursor }: GetImagesProps) {
+export async function getImages({ cursor, query }: GetImagesProps) {
   try {
     // parse search queries
     const pageAsNumber = Number(cursor)
@@ -30,12 +29,22 @@ export async function getImages({ cursor }: GetImagesProps) {
         .limit(limit)
         .offset(offset)
         .orderBy(desc(images.createdAt))
+        .where(
+          query
+            ? sql`LOWER(${images.prompt}) LIKE LOWER(${`%${query}%`})`
+            : undefined,
+        )
 
       const count = await trx
         .select({
           count: sql<number>`count(${images.id})`.mapWith(Number),
         })
         .from(images)
+        .where(
+          query
+            ? sql`LOWER(${images.prompt}) LIKE LOWER(${`%${query}%`})`
+            : undefined,
+        )
         .execute()
         .then((res) => res[0]?.count ?? 0)
 

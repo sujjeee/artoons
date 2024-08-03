@@ -8,6 +8,7 @@ import { ImagesSection } from "@/components/sections/images-section"
 import { getImages } from "@/actions/images"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { useInView } from "react-intersection-observer"
+import { useSearchParams } from "next/navigation"
 
 export function SearchSections() {
   const { ref, inView } = useInView()
@@ -17,16 +18,18 @@ export function SearchSections() {
   })
 
   const fetchProjects = async ({ pageParam }: { pageParam: any }) => {
-    console.log({ pageParam })
     const data = await getImages({
       cursor: pageParam ?? 0,
+      query: searchQuery,
     })
+
+    console.log({ data })
 
     return data
   }
 
   const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
-    queryKey: ["projects"],
+    queryKey: ["projects", searchQuery],
     queryFn: fetchProjects,
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {

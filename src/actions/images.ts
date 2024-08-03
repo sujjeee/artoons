@@ -2,11 +2,24 @@
 
 import { db } from "@/db"
 import { images } from "@/db/schemas"
+import { getEmbeddings } from "@/lib/embedding"
+import { vectorize } from "@/lib/vector"
 import { desc, sql } from "drizzle-orm"
 
 interface GetImagesProps {
   cursor: string
   query?: string
+}
+
+type Image = {
+  id: string
+  prompt: string
+}
+
+type VectorSearchResult = {
+  id: string
+  score: number
+  metadata: Image
 }
 
 export async function getImages({ cursor, query }: GetImagesProps) {
@@ -54,8 +67,46 @@ export async function getImages({ cursor, query }: GetImagesProps) {
       }
     })
 
-    // Format the data
-    const formattedImages = data.map((image) => ({
+    // If there is no query, return the data from the database directly
+    if (!query) {
+      const formattedImages = data.map((image) => ({
+        url: `https://storage.sujjeee.com/images/${image.id}.jpeg`,
+        prompt: image.prompt,
+      }))
+
+      const pageCount = Math.ceil(count / limit)
+
+      return { data: formattedImages, pageCount }
+    }
+
+    // Vector query
+    const vectorQuery = await getEmbeddings(query)
+    const vectorSearchImages = (await vectorize.query({
+      vector: vectorQuery,
+      topK: 10,
+      includeMetadata: true,
+    })) as VectorSearchResult[]
+
+    // Extract metadata from vector search results
+    const vectorMetadata: Image[] = vectorSearchImages.map(
+      (item) => item.metadata,
+    )
+
+    // Merge data from the database and vector search results
+    const mergedData: Image[] = [...data, ...vectorMetadata]
+
+    // Filter out duplicates based on id
+    const uniqueData: Image[] = mergedData.reduce((acc, current) => {
+      const x = acc.find((item) => item.id === current.id)
+      if (!x) {
+        return acc.concat([current])
+      } else {
+        return acc
+      }
+    }, [] as Image[])
+
+    // Format the merged data
+    const formattedImages = uniqueData.map((image) => ({
       url: `https://storage.sujjeee.com/images/${image.id}.jpeg`,
       prompt: image.prompt,
     }))

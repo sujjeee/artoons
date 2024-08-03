@@ -4,12 +4,12 @@ const model = "thenlper/gte-base"
 
 const inference = new HfInference(env.HUGGINGFACE_KEY)
 
-export async function getEmbeddings(text: string) {
+export async function getEmbeddings(text: string): Promise<number[]> {
   try {
-    const embeddings = await inference.featureExtraction({
+    const embeddings = (await inference.featureExtraction({
       model,
       inputs: text,
-    })
+    })) as number[]
 
     return embeddings
   } catch (error) {

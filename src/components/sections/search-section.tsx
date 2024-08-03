@@ -25,7 +25,6 @@ export function SearchSections() {
       query: debouncedQuery,
     })
 
-    console.log({ data })
     return data
   }
 

@@ -8,7 +8,7 @@ import { ImagesSection } from "@/components/sections/images-section"
 import { getImages } from "@/actions/images"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { useInView } from "react-intersection-observer"
-import { useSearchParams } from "next/navigation"
+import { useDebounce } from "@/hooks/use-debounce"
 
 export function SearchSections() {
   const { ref, inView } = useInView()
@@ -17,19 +17,20 @@ export function SearchSections() {
     defaultValue: "",
   })
 
+  const debouncedQuery = useDebounce(searchQuery, 300)
+
   const fetchProjects = async ({ pageParam }: { pageParam: any }) => {
     const data = await getImages({
       cursor: pageParam ?? 0,
-      query: searchQuery,
+      query: debouncedQuery,
     })
 
     console.log({ data })
-
     return data
   }
 
   const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
-    queryKey: ["projects", searchQuery],
+    queryKey: ["projects", debouncedQuery],
     queryFn: fetchProjects,
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {

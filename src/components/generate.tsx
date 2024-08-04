@@ -148,6 +148,7 @@ export function Generate() {
               prompt={prompt}
               isShareable={true}
               truncate={false}
+              blob={true}
             />
 
             <Button

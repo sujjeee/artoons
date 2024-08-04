@@ -4,11 +4,14 @@ import { env } from "@/env"
 import { uploadToStorage } from "@/actions/upload"
 import { revalidatePath, revalidateTag } from "next/cache"
 
+import { unstable_noStore as noStore } from "next/cache"
+
 interface RequestBody {
   prompt: string
 }
 
 export async function POST(request: NextRequest) {
+  noStore()
   try {
     const body: RequestBody = await request.json()
 

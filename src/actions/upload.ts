@@ -10,6 +10,8 @@ import { getEmbeddings } from "@/lib/embedding"
 import { db } from "@/db"
 import { images } from "@/db/schemas"
 
+import { unstable_noStore as noStore } from "next/cache"
+
 interface GetStorageUrlProps {
   filename: string
 }
@@ -37,6 +39,7 @@ interface UploadToStorageProps {
 }
 
 export async function uploadToStorage({ blob, prompt }: UploadToStorageProps) {
+  noStore()
   try {
     // Check if the output is an image
     if (!blob.type.startsWith("image/")) throw new Error("Blob is not an image")
@@ -48,24 +51,32 @@ export async function uploadToStorage({ blob, prompt }: UploadToStorageProps) {
     const url = await getStorageUrl({ filename: `${imageId}.jpeg` })
 
     if (url) {
-      await fetch(url, {
+      const uploadResponse = await fetch(url, {
         method: "PUT",
         body: blob,
-      })
-
-      await vectorize.upsert({
-        id: imageId,
-        vector: await getEmbeddings(prompt),
-        metadata: {
-          id: imageId,
-          prompt: prompt,
+        headers: {
+          "Content-Type": blob.type,
         },
       })
 
-      await db.insert(images).values({
-        id: imageId,
-        prompt: prompt,
-      })
+      // Check if the upload was successful
+      if (uploadResponse.ok) {
+        await vectorize.upsert({
+          id: imageId,
+          vector: await getEmbeddings(prompt),
+          metadata: {
+            id: imageId,
+            prompt: prompt,
+          },
+        })
+
+        await db.insert(images).values({
+          id: imageId,
+          prompt: prompt,
+        })
+      } else {
+        throw new Error("Image upload failed")
+      }
     }
   } catch (error) {
     console.error("Error uploading to storage:", error)

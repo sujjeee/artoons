@@ -13,9 +13,11 @@ interface ImageCardProps {
   prompt: string | null
   isShareable?: boolean
   truncate?: boolean
+  blob?: boolean
 }
 
 export function ImageCard({
+  blob,
   imgUrl,
   prompt,
   isShareable = false,
@@ -44,11 +46,19 @@ export function ImageCard({
     isSharing = true
 
     try {
-      const response = await fetch(`/api/download/${getIdFromUrl(imgUrl)}`)
-      const blob = await response.blob()
+      let blobData: Blob
+
+      if (blob) {
+        // Assuming imgUrl is a blob URL
+        const response = await fetch(imgUrl)
+        blobData = await response.blob()
+      } else {
+        const response = await fetch(`/api/download/${getIdFromUrl(imgUrl)}`)
+        blobData = await response.blob()
+      }
 
       const filesArray = [
-        new File([blob], "meme.jpg", {
+        new File([blobData], "artoons.jpg", {
           type: "image/jpeg",
           lastModified: new Date().getTime(),
         }),
@@ -64,6 +74,22 @@ export function ImageCard({
       alert("Failed to share the image.")
     } finally {
       isSharing = false
+    }
+  }
+
+  function onDownload() {
+    if (!imgUrl) return alert("No image url found!")
+
+    if (blob) {
+      // Assuming imgUrl is a blob URL
+      const link = document.createElement("a")
+      link.href = imgUrl
+      link.download = "artoons.jpg"
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    } else {
+      window.location.href = `/api/download/${getIdFromUrl(imgUrl)}`
     }
   }
 
@@ -122,11 +148,9 @@ export function ImageCard({
                   size={"icon"}
                   title="Download"
                   className="size-5 p-0.5 animate-jelly"
+                  onClick={onDownload}
                 >
-                  <a href={`/api/download/${getIdFromUrl(imgUrl)}`}>
-                    {" "}
-                    <Icons.download className="size-3.5 text-muted-foreground" />
-                  </a>
+                  <Icons.download className="size-3.5 text-muted-foreground" />
                 </Button>
                 <Button
                   variant={"ghost"}

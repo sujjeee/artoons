@@ -138,7 +138,7 @@ export async function getRandomImages() {
 
         // Format the merged data
         const formattedImages = randomImages.map(
-          (image) => `${env.NEXT_PUBLIC_APP_URL}/download/${image.id}`,
+          (image) => `${env.NEXT_PUBLIC_APP_URL}/api/download/${image.id}`,
         )
 
         return formattedImages

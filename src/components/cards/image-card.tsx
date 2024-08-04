@@ -44,7 +44,7 @@ export function ImageCard({
     isSharing = true
 
     try {
-      const response = await fetch(`/download/${getIdFromUrl(imgUrl)}`)
+      const response = await fetch(`/api/download/${getIdFromUrl(imgUrl)}`)
       const blob = await response.blob()
 
       const filesArray = [
@@ -123,7 +123,7 @@ export function ImageCard({
                   title="Download"
                   className="size-5 p-0.5 animate-jelly"
                 >
-                  <a href={`/download/${getIdFromUrl(imgUrl)}`}>
+                  <a href={`/api/download/${getIdFromUrl(imgUrl)}`}>
                     {" "}
                     <Icons.download className="size-3.5 text-muted-foreground" />
                   </a>

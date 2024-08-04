@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export async function generateUniqueId() {
+export function generateUniqueId() {
   const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyz", 10)
   return nanoid()
 }

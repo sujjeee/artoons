@@ -5,7 +5,7 @@ export async function GET(request: NextRequest) {
     const url = new URL(request.url)
     const pathname = url.pathname
     const pathSegments = pathname.split("/")
-    const id = pathSegments[2]
+    const id = pathSegments[3]
 
     if (!id) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 })
@@ -32,6 +32,7 @@ export async function GET(request: NextRequest) {
       },
     })
   } catch (error) {
+    console.log(error)
     return NextResponse.json({ error }, { status: 500 })
   }
 }

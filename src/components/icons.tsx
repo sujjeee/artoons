@@ -140,7 +140,7 @@ export const Icons = {
     >
       <path
         stroke="currentColor"
-        strokeWidth="0.2"
+        strokeWidth="0.15"
         d="M1 9.50006C1 10.3285 1.67157 11.0001 2.5 11.0001H4L4 10.0001H2.5C2.22386 10.0001 2 9.7762 2 9.50006L2 2.50006C2 2.22392 2.22386 2.00006 2.5 2.00006L9.5 2.00006C9.77614 2.00006 10 2.22392 10 2.50006V4.00002H5.5C4.67158 4.00002 4 4.67159 4 5.50002V12.5C4 13.3284 4.67158 14 5.5 14H12.5C13.3284 14 14 13.3284 14 12.5V5.50002C14 4.67159 13.3284 4.00002 12.5 4.00002H11V2.50006C11 1.67163 10.3284 1.00006 9.5 1.00006H2.5C1.67157 1.00006 1 1.67163 1 2.50006V9.50006ZM5 5.50002C5 5.22388 5.22386 5.00002 5.5 5.00002H12.5C12.7761 5.00002 13 5.22388 13 5.50002V12.5C13 12.7762 12.7761 13 12.5 13H5.5C5.22386 13 5 12.7762 5 12.5V5.50002Z"
         fill="currentColor"
         fillRule="evenodd"
@@ -180,6 +180,40 @@ export const Icons = {
         fill="currentColor"
         d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3a3 3 0 0 0-3-3a3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3a3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66c0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"
       />
+    </svg>
+  ),
+  imageLoader: (props: IconProps) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <circle cx="4" cy="12" r="1.5" fill="currentColor">
+        <animate
+          attributeName="r"
+          dur="0.75s"
+          repeatCount="indefinite"
+          values="1.5;3;1.5"
+        />
+      </circle>
+      <circle cx="12" cy="12" r="3" fill="currentColor">
+        <animate
+          attributeName="r"
+          dur="0.75s"
+          repeatCount="indefinite"
+          values="3;1.5;3"
+        />
+      </circle>
+      <circle cx="20" cy="12" r="1.5" fill="currentColor">
+        <animate
+          attributeName="r"
+          dur="0.75s"
+          repeatCount="indefinite"
+          values="1.5;3;1.5"
+        />
+      </circle>
     </svg>
   ),
 }

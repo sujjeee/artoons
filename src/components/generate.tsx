@@ -4,12 +4,14 @@ import React from "react"
 import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { cn } from "@/lib/utils"
 import { getRandomImages } from "@/actions/images"
 import { GenerateInput } from "@/components/ui/generate-input"
 import confetti from "canvas-confetti"
 import { ImageCard } from "./cards/image-card"
+import { useRouter } from "next/navigation"
+import { useRefetchStore } from "@/lib/store/use-refetch"
 
 export function Generate() {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
@@ -17,6 +19,7 @@ export function Generate() {
   const [isGenerating, setIsGenerating] = React.useState(false)
   const [prompt, setPrompt] = React.useState("")
   const [imageSrc, setImageSrc] = React.useState<string | null>(null)
+  const router = useRouter()
 
   const { data } = useQuery({
     queryKey: ["getRandomImages"],
@@ -105,8 +108,10 @@ export function Generate() {
       if (response.ok) {
         const blob = await response.blob()
         const imageUrl = URL.createObjectURL(blob)
+
         setImageSrc(imageUrl)
         setIsGenerating(false)
+
         showConfetti()
       } else {
         const errorData = await response.json()

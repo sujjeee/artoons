@@ -9,7 +9,7 @@ import { getImages } from "@/actions/images"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { useInView } from "react-intersection-observer"
 import { useDebounce } from "@/hooks/use-debounce"
-import { Skeleton } from "../ui/skeleton"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export function SearchSections() {
   const { ref, inView } = useInView()

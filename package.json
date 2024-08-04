@@ -14,6 +14,8 @@
     "db:seed": "dotenv tsx src/db/seed.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.623.0",
+    "@aws-sdk/s3-request-presigner": "^3.623.0",
     "@hookform/resolvers": "^3.9.0",
     "@huggingface/inference": "^2.8.0",
     "@libsql/client": "^0.8.0",

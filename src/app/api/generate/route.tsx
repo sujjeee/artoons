@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import { HfInference } from "@huggingface/inference"
 import { env } from "@/env"
-import path from "path"
-import { generateUniqueId } from "@/lib/utils"
-import { promises as fsPromises } from "fs"
+import { uploadToStorage } from "@/actions/upload"
+import { revalidatePath, revalidateTag } from "next/cache"
 
 interface RequestBody {
   prompt: string
@@ -27,27 +26,14 @@ export async function POST(request: NextRequest) {
       },
     })) as Blob
 
-    const imageId = generateUniqueId()
-    const imagePath = path.join("images", `${imageId}.jpeg`)
+    void uploadToStorage({
+      blob: output,
+      prompt: body.prompt,
+    })
 
-    const arrayBuffer = await output.arrayBuffer()
-    await fsPromises.writeFile(imagePath, Buffer.from(arrayBuffer))
+    revalidatePath("/")
+    revalidateTag("getRandomImages")
 
-    // Read the existing data.json file
-    let data = []
-
-    try {
-      const dataFileContent = await fsPromises.readFile("data.json", "utf8")
-      data = JSON.parse(dataFileContent)
-    } catch (error) {
-      throw error
-    }
-
-    // Append the new entry
-    data.push({ id: imageId, prompt: body.prompt })
-
-    // Write the updated data back to the data.json file
-    await fsPromises.writeFile("data.json", JSON.stringify(data, null, 2))
     return new NextResponse(output, {
       status: 200,
       headers: {

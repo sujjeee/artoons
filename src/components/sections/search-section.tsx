@@ -9,6 +9,7 @@ import { getImages } from "@/actions/images"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { useInView } from "react-intersection-observer"
 import { useDebounce } from "@/hooks/use-debounce"
+import { Skeleton } from "../ui/skeleton"
 
 export function SearchSections() {
   const { ref, inView } = useInView()
@@ -28,7 +29,7 @@ export function SearchSections() {
     return data
   }
 
-  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
+  const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery({
     queryKey: ["projects", debouncedQuery],
     queryFn: fetchProjects,
     initialPageParam: 0,
@@ -63,8 +64,18 @@ export function SearchSections() {
           />
         </div>
       </div>
-      <div className="pt-36">
+      <div className="pt-36 w-full">
         <ImagesSection images={images} ref={ref} hasNextPage={hasNextPage} />
+        {isLoading && (
+          <section className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 w-full pt-2">
+            {Array.from({ length: 10 }).map((_, idx) => (
+              <Skeleton
+                key={idx}
+                className="aspect-[0.9] rounded-xl size-full"
+              />
+            ))}
+          </section>
+        )}
       </div>
     </div>
   )

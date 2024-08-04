@@ -2,9 +2,11 @@
 
 import { db } from "@/db"
 import { images } from "@/db/schemas"
+import { env } from "@/env"
 import { getEmbeddings } from "@/lib/embedding"
 import { vectorize } from "@/lib/vector"
 import { desc, sql } from "drizzle-orm"
+import { unstable_cache as cache } from "next/cache"
 
 interface GetImagesProps {
   cursor: string
@@ -120,3 +122,34 @@ export async function getImages({ cursor, query }: GetImagesProps) {
 }
 
 export type GetImageType = Awaited<ReturnType<typeof getImages>>["data"]
+
+export async function getRandomImages() {
+  try {
+    return await cache(
+      async () => {
+        const randomImages = await db.query.images.findMany({
+          columns: {
+            id: true,
+          },
+          limit: 20,
+        })
+
+        if (!randomImages) return []
+
+        // Format the merged data
+        const formattedImages = randomImages.map(
+          (image) => `${env.NEXT_PUBLIC_APP_URL}/download/${image.id}`,
+        )
+
+        return formattedImages
+      },
+      ["getRandomImages"],
+      {
+        tags: ["getRandomImages"],
+        revalidate: 3600,
+      },
+    )()
+  } catch (error) {
+    return []
+  }
+}

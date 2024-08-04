@@ -4,7 +4,6 @@ import React from "react"
 import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
 import { useQuery } from "@tanstack/react-query"
 import { cn } from "@/lib/utils"
 import { getRandomImages } from "@/actions/images"
@@ -23,7 +22,7 @@ export function Generate() {
     enabled: isDialogOpen,
   })
 
-  const images = data?.map((image) => image) || []
+  const images = React.useMemo(() => data?.map((image) => image) || [], [data])
 
   React.useEffect(() => {
     const preloadImage = (url: any) => {
@@ -82,7 +81,7 @@ export function Generate() {
               autoFocus
               placeholder="Type your prompt here."
               className="rounded-lg"
-              isLoading={true}
+              isLoading={false}
             />
           </div>
         </div>

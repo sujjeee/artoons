@@ -22,7 +22,7 @@ const GenerateInput = React.forwardRef<HTMLInputElement, InputProps>(
           {...props}
         />
         {isLoading ? (
-          <Icons.spinner className="absolute right-4 top-2/4 size-5 translate-y-[-50%] text-muted-foreground" />
+          <Icons.spinner className="absolute right-4 top-2/4 size-4 translate-y-[-50%] text-muted-foreground" />
         ) : (
           <Icons.sparkle className="absolute right-4 top-2/4 size-3 translate-y-[-50%] text-muted-foreground" />
         )}

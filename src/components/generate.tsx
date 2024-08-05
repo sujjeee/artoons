@@ -4,14 +4,12 @@ import React from "react"
 import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
-import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { cn } from "@/lib/utils"
 import { getRandomImages } from "@/actions/images"
 import { GenerateInput } from "@/components/ui/generate-input"
 import confetti from "canvas-confetti"
 import { ImageCard } from "./cards/image-card"
-import { useRouter } from "next/navigation"
-import { useRefetchStore } from "@/lib/store/use-refetch"
 
 export function Generate() {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
@@ -19,12 +17,14 @@ export function Generate() {
   const [isGenerating, setIsGenerating] = React.useState(false)
   const [prompt, setPrompt] = React.useState("")
   const [imageSrc, setImageSrc] = React.useState<string | null>(null)
-  const router = useRouter()
+  const [isLoadingImages, setIsLoadingImages] = React.useState(true)
+  const [showPlaceholder, setShowPlaceholder] = React.useState(true)
 
   const { data } = useQuery({
     queryKey: ["getRandomImages"],
     queryFn: async () => {
       const responseData = await getRandomImages()
+
       return responseData
     },
     enabled: isDialogOpen,
@@ -33,33 +33,48 @@ export function Generate() {
   const images = React.useMemo(() => data?.map((image) => image) || [], [data])
 
   React.useEffect(() => {
-    const preloadImage = (url: any) => {
-      return new Promise((resolve, reject) => {
-        const img = new Image()
-        img.onload = () => resolve(url)
-        img.onerror = (error) => {
-          console.error("Image load error:", error)
-          reject(error)
-        }
-        img.src = url
+    const preloadImages = async () => {
+      setIsLoadingImages(true)
+      const preloadPromises = images.map((url) => {
+        return new Promise((resolve, reject) => {
+          const img = new Image()
+          img.onload = () => resolve(url)
+          img.onerror = (error) => {
+            console.error("Image load error:", error)
+            reject(error)
+          }
+          img.src = url
+        })
       })
-    }
 
-    const changeBackground = async () => {
-      const nextIndex = (currentIndex + 1) % images.length
       try {
-        await preloadImage(images[nextIndex])
-        setCurrentIndex(nextIndex)
+        await Promise.all(preloadPromises)
+        setIsLoadingImages(false)
+        setTimeout(() => setShowPlaceholder(false), 500)
       } catch (error) {
-        console.error("Failed to preload image:", error)
+        console.error("Failed to preload images:", error)
+        setIsLoadingImages(false)
+        setTimeout(() => setShowPlaceholder(false), 500)
       }
     }
 
     if (images.length > 0) {
+      preloadImages()
+    }
+  }, [images])
+
+  React.useEffect(() => {
+    const changeBackground = () => {
+      if (images.length === 0) return
+      const nextIndex = (currentIndex + 1) % images.length
+      setCurrentIndex(nextIndex)
+    }
+
+    if (images.length > 0 && !isLoadingImages) {
       const interval = setInterval(changeBackground, 3000)
       return () => clearInterval(interval)
     }
-  }, [currentIndex, images])
+  }, [currentIndex, images, isLoadingImages])
 
   function showConfetti() {
     const end = Date.now() + 3 * 1000 // 3 seconds
@@ -105,7 +120,7 @@ export function Generate() {
         body: JSON.stringify({ prompt }),
       })
 
-      if (response.ok) {
+      if (true) {
         const blob = await response.blob()
         const imageUrl = URL.createObjectURL(blob)
 
@@ -113,9 +128,6 @@ export function Generate() {
         setIsGenerating(false)
 
         showConfetti()
-      } else {
-        const errorData = await response.json()
-        console.error("Error:", errorData.error)
       }
     } catch (error) {
       console.error("Error fetching data:", error)
@@ -137,9 +149,12 @@ export function Generate() {
         </Button>
       </DialogTrigger>
       <DialogContent
-        className={cn("bg-gray-50 sm:rounded-2xl p-0", {
-          "p-2 gap-2 w-full max-h-[530px] h-full": !imageSrc,
-        })}
+        className={cn(
+          "bg-gray-50 sm:rounded-2xl p-0  select-none outline-none",
+          {
+            "p-2 gap-2 w-full max-h-[530px] h-full": !imageSrc,
+          },
+        )}
       >
         {imageSrc ? (
           <div className=" relative size-full flex flex-col  gap-4 justify-center items-center">
@@ -153,26 +168,37 @@ export function Generate() {
 
             <Button
               variant="secondary"
-              onClick={() => setImageSrc(null)}
+              onClick={() => {
+                setPrompt("")
+                setImageSrc(null)
+              }}
               className="absolute -bottom-14"
             >
               Generate New <Icons.sparkle className="ml-2 size-3.5" />
             </Button>
           </div>
         ) : (
-          <div className="relative w-full h-full rounded-xl overflow-hidden">
+          <div className="relative w-full h-full rounded-xl overflow-hidden  select-none outline-none">
+            <div
+              style={{
+                backgroundImage: `url(${"https://tiny-little-illustrations.pages.dev/_ipx/_/illustrations/cat.jpeg"})`,
+              }}
+              className={cn(
+                "absolute inset-0 object-cover object-top w-full -z-10 bg-cover bg-center transition-opacity duration-1000",
+                showPlaceholder ? "opacity-100" : "opacity-0",
+              )}
+            />
             {images.map((image, index) => (
               <div
                 key={index}
                 style={{
-                  backgroundImage: `url(${imageSrc ? imageSrc : image})`,
+                  backgroundImage: `url(${image})`,
                 }}
                 className={cn(
-                  "absolute inset-0 object-cover object-top w-full -z-10 bg-cover bg-center",
+                  "absolute inset-0 object-cover object-top w-full -z-10 bg-cover bg-center transition-opacity duration-1000",
                   {
-                    "opacity-100": index === currentIndex,
-                    "opacity-0": index !== currentIndex,
-                    "transition-opacity duration-1000": imageSrc === null,
+                    "opacity-100": !showPlaceholder && index === currentIndex,
+                    "opacity-0": showPlaceholder || index !== currentIndex,
                   },
                 )}
               />

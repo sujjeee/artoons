@@ -24,9 +24,6 @@ export async function POST(request: NextRequest) {
     const output = (await model.request({
       model: "alvdansen/littletinies",
       inputs: body.prompt,
-      parameters: {
-        return_full_text: false,
-      },
     })) as Blob
 
     void uploadToStorage({

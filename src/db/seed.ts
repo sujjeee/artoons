@@ -1,7 +1,7 @@
 import { getEmbeddings } from "@/lib/embedding"
 import { db } from "."
 import { images } from "./schemas"
-import { vectorize } from "@/lib/vector"
+import { sql } from "drizzle-orm"
 
 async function seedData() {
   const fakeData = [
@@ -13,37 +13,31 @@ async function seedData() {
       id: "5gbv0q40rs",
       prompt: "Cute bear standing",
     },
-    {
-      id: "h009oqmn2o",
-      prompt: "Boy riding a bike",
-    },
-    {
-      id: "30ux0w1ojc",
-      prompt: "Blonde girl smiling",
-    },
-    {
-      id: "76pr679mqn",
-      prompt: "Boy playing basketball",
-    },
   ]
 
   await Promise.all(
     fakeData.map(async (image) => {
+      const embedding = await getEmbeddings(image.prompt)
+      const embeddingBuffer = Buffer.from(new Float32Array(embedding).buffer)
       await db.insert(images).values({
         id: image.id,
         prompt: image.prompt,
-      })
-
-      await vectorize.upsert({
-        id: image.id,
-        vector: await getEmbeddings(image.prompt),
-        metadata: {
-          id: image.id,
-          prompt: image.prompt,
-        },
+        embedding: embeddingBuffer,
       })
     }),
   )
+
+  const embedding = await getEmbeddings("standing bear")
+  const embeddingBuffer = Buffer.from(new Float32Array(embedding).buffer)
+
+  const result = await db
+    .select({
+      prompt: images.prompt,
+      similarity: sql`vector_distance_cos(${images.embedding}, ${embeddingBuffer})`,
+    })
+    .from(images)
+
+  console.log({ result })
 
   console.log("DataBase seeded successfully!")
 }

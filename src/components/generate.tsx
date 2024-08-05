@@ -149,12 +149,9 @@ export function Generate() {
         </Button>
       </DialogTrigger>
       <DialogContent
-        className={cn(
-          "bg-gray-50 sm:rounded-2xl p-0  select-none outline-none",
-          {
-            "p-2 gap-2 w-full max-h-[530px] h-full": !imageSrc,
-          },
-        )}
+        className={cn("bg-gray-50 sm:rounded-2xl p-0 outline-none", {
+          "p-2 gap-2 w-full max-h-[530px] h-full": !imageSrc,
+        })}
       >
         {imageSrc ? (
           <div className=" relative size-full flex flex-col  gap-4 justify-center items-center">
@@ -178,7 +175,7 @@ export function Generate() {
             </Button>
           </div>
         ) : (
-          <div className="relative w-full h-full rounded-xl overflow-hidden  select-none outline-none">
+          <div className="relative w-full h-full rounded-xl overflow-hidden outline-none">
             <div
               style={{
                 backgroundImage: `url(${"https://tiny-little-illustrations.pages.dev/_ipx/_/illustrations/cat.jpeg"})`,

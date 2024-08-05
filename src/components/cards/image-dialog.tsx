@@ -1,7 +1,8 @@
 import { useImageStore } from "@/lib/store/use-image"
 import React from "react"
-import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { ImageCard } from "@/components/cards/image-card"
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden"
 
 export function ImageDialog() {
   const { data, setData } = useImageStore()
@@ -27,7 +28,10 @@ export function ImageDialog() {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="bg-gray-50 p-0 sm:rounded-2xl ">
+      <DialogTitle asChild>
+        <VisuallyHidden.Root>Image Preview</VisuallyHidden.Root>
+      </DialogTitle>
+      <DialogContent className="bg-gray-50 p-0 sm:rounded-2xl outline-none">
         {" "}
         <ImageCard
           imgUrl={data.imageUrl}

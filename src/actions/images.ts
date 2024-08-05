@@ -107,6 +107,8 @@ export async function getImages({ cursor, query }: GetImagesProps) {
       }
     }, [] as Image[])
 
+    console.log({ uniqueData })
+
     // Format the merged data
     const formattedImages = uniqueData.map((image) => ({
       url: `https://storage.sujjeee.com/images/${image.id}.jpeg`,

@@ -53,7 +53,7 @@ export function ImageCard({
         const response = await fetch(imgUrl)
         blobData = await response.blob()
       } else {
-        const response = await fetch(`/api/download/${getIdFromUrl(imgUrl)}`)
+        const response = await fetch(`/download/${getIdFromUrl(imgUrl)}`)
         blobData = await response.blob()
       }
 
@@ -89,7 +89,7 @@ export function ImageCard({
       link.click()
       document.body.removeChild(link)
     } else {
-      window.location.href = `/api/download/${getIdFromUrl(imgUrl)}`
+      window.location.href = `/download/${getIdFromUrl(imgUrl)}`
     }
   }
 

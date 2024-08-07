@@ -36,7 +36,10 @@ export function Generate() {
   })
 
   const images = React.useMemo(
-    () => data?.data.map((image) => image) || [],
+    () =>
+      data?.data.map((image) => ({
+        id: `https://storage.sujjeee.com/images/${image.id}.jpeg`,
+      })) || [],
     [data],
   )
 
@@ -51,7 +54,7 @@ export function Generate() {
             console.error("Image load error:", error)
             reject(error)
           }
-          img.src = `${env.NEXT_PUBLIC_APP_URL}/api/download/${url.id}`
+          img.src = url.id
         })
       })
 
@@ -149,6 +152,7 @@ export function Generate() {
     }
   }
 
+  console.log("all images", images)
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
@@ -186,28 +190,32 @@ export function Generate() {
           <div className="relative w-full h-full rounded-xl overflow-hidden outline-none">
             <div
               style={{
-                backgroundImage: `url(${"https://tiny-little-illustrations.pages.dev/_ipx/_/illustrations/cat.jpeg"})`,
+                backgroundImage: `url(${"https://storage.sujjeee.com/images/akifsby6od.jpeg"})`,
               }}
               className={cn(
                 "absolute inset-0 object-cover object-top w-full -z-10 bg-cover bg-center transition-opacity duration-1000",
                 showPlaceholder ? "opacity-100" : "opacity-0",
               )}
             />
-            {images.map((image, index) => (
-              <div
-                key={index}
-                style={{
-                  backgroundImage: `url(${image})`,
-                }}
-                className={cn(
-                  "absolute inset-0 object-cover object-top w-full -z-10 bg-cover bg-center transition-opacity duration-1000",
-                  {
-                    "opacity-100": !showPlaceholder && index === currentIndex,
-                    "opacity-0": showPlaceholder || index !== currentIndex,
-                  },
-                )}
-              />
-            ))}
+            {images.map((image, index) => {
+              console.log("checking image", image)
+              return (
+                <div
+                  key={image.id}
+                  style={{
+                    backgroundImage: `url(${image.id})`,
+                  }}
+                  className={cn(
+                    "absolute inset-0 object-cover object-top w-full -z-10 bg-cover bg-center transition-opacity duration-1000",
+                    {
+                      "opacity-100": !showPlaceholder && index === currentIndex,
+                      "opacity-0": showPlaceholder || index !== currentIndex,
+                    },
+                  )}
+                />
+              )
+            })}
+
             <div
               className={cn("absolute inset-0  pointer-events-none", {
                 "bg-gradient-to-t from-black/50 to-transparent":

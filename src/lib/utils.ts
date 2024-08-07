@@ -1,14 +1,12 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { customAlphabet } from "nanoid"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function generateUniqueId() {
-  const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyz", 10)
-  return nanoid()
+export function asleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 export function getIdFromUrl(url: string): string | null {
@@ -27,8 +25,4 @@ export function getIdFromUrl(url: string): string | null {
     console.error("Invalid URL:", error)
     return null
   }
-}
-
-export function asleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms))
 }

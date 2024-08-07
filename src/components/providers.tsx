@@ -2,7 +2,7 @@
 
 import { ThemeProvider as NextThemesProvider } from "next-themes"
 import type { ThemeProviderProps } from "next-themes/dist/types"
-import { ImageDialog } from "./cards/image-dialog"
+import { ImageView } from "@/components/image-view"
 import { ReactNode } from "react"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
@@ -23,7 +23,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <QueryProvider>
       <main className="container max-w-screen-xl">
         {children}
-        <ImageDialog />
+        <ImageView />
       </main>
     </QueryProvider>
   )

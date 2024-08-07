@@ -6,31 +6,39 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { useQuery } from "@tanstack/react-query"
 import { cn } from "@/lib/utils"
-import { getRandomImages } from "@/actions/images"
-import { GenerateInput } from "@/components/ui/generate-input"
+
+import { GenerateInput } from "@/components/ui/input"
 import confetti from "canvas-confetti"
-import { ImageCard } from "./cards/image-card"
+import { ImageCard } from "@/components/image-card"
+import { RandomImages } from "@/types"
+import { env } from "@/env"
 
 export function Generate() {
+  const [prompt, setPrompt] = React.useState("")
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
   const [currentIndex, setCurrentIndex] = React.useState(0)
   const [isGenerating, setIsGenerating] = React.useState(false)
-  const [prompt, setPrompt] = React.useState("")
-  const [imageSrc, setImageSrc] = React.useState<string | null>(null)
   const [isLoadingImages, setIsLoadingImages] = React.useState(true)
   const [showPlaceholder, setShowPlaceholder] = React.useState(true)
+  const [imageSrc, setImageSrc] = React.useState<string | null>(null)
 
   const { data } = useQuery({
     queryKey: ["getRandomImages"],
     queryFn: async () => {
-      const responseData = await getRandomImages()
+      const response = await fetch("/api/images/random/20")
 
-      return responseData
+      if (!response.ok) throw new Error("Network response was not ok")
+      const result = (await response.json()) as RandomImages
+
+      return result
     },
     enabled: isDialogOpen,
   })
 
-  const images = React.useMemo(() => data?.map((image) => image) || [], [data])
+  const images = React.useMemo(
+    () => data?.data.map((image) => image) || [],
+    [data],
+  )
 
   React.useEffect(() => {
     const preloadImages = async () => {
@@ -43,7 +51,7 @@ export function Generate() {
             console.error("Image load error:", error)
             reject(error)
           }
-          img.src = url
+          img.src = `${env.NEXT_PUBLIC_APP_URL}/api/download/${url.id}`
         })
       })
 

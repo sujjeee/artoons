@@ -1,10 +1,10 @@
 import { useImageStore } from "@/lib/store/use-image"
 import React from "react"
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
-import { ImageCard } from "@/components/cards/image-card"
+import { ImageCard } from "@/components/image-card"
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden"
 
-export function ImageDialog() {
+export function ImageView() {
   const { data, setData } = useImageStore()
   const [isOpen, setIsOpen] = React.useState(
     !!data.imageUrl && !!data.imagePrompt,

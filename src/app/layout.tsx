@@ -4,8 +4,16 @@ import { Providers } from "@/components/providers"
 import { Inter } from "next/font/google"
 import { Info } from "@/components/info"
 import { Header } from "@/components/header"
+import { Metadata } from "next"
 
 const inter = Inter({ subsets: ["latin"] })
+
+export const metadata: Metadata = {
+  metadataBase: new URL("https://artoons.vercel.app"),
+  title: "Artoons",
+  creator: "sujjeee",
+  keywords: ["artoons", "sujjeeee"],
+}
 
 export default function RootLayout({
   children,

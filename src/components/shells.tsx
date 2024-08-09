@@ -3,7 +3,10 @@ import { ImageCard } from "@/components/image-card"
 import { Skeleton } from "@/components/ui/skeleton"
 
 interface ImagesSectionProps {
-  images: GetImageType
+  images: {
+    url: string
+    prompt: string
+  }[]
   hasNextPage: boolean
 }
 

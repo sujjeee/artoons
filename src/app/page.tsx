@@ -48,8 +48,8 @@ export default function HomePage() {
     queryFn: fetchProjects,
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
-      const nextPage = allPages.length + 1
-      return nextPage <= lastPage.count ? nextPage : undefined
+      const nextPage = allPages.length
+      return nextPage * 10 < lastPage.count ? nextPage + 1 : undefined
     },
   })
 
@@ -68,8 +68,6 @@ export default function HomePage() {
         })),
       )
       .flat() || []
-
-  console.log({ images })
 
   return (
     <div className="py-32 w-full mx-auto flex flex-col items-center justify-center">

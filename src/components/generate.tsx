@@ -11,7 +11,6 @@ import { GenerateInput } from "@/components/ui/input"
 import confetti from "canvas-confetti"
 import { ImageCard } from "@/components/image-card"
 import { RandomImages } from "@/types"
-import { env } from "@/env"
 
 export function Generate() {
   const [prompt, setPrompt] = React.useState("")

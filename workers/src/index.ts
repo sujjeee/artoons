@@ -33,4 +33,4 @@ const routes = app.route("/images", image).route("/generate", generate)
 
 export default app
 
-export type ApiTypes = typeof routes
+export type APIResponse = typeof routes

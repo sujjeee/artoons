@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { api, cn } from "@/lib/utils"
-
 import { GenerateInput } from "@/components/ui/input"
 import confetti from "canvas-confetti"
 import { ImageCard } from "@/components/image-card"

@@ -11,15 +11,13 @@ import { dbClient } from "../db"
 import { images } from "../db/schema"
 import { getEmbeddings } from "../lib/embedding"
 
-const app = new Hono<{ Bindings: Env }>()
-
 const generateImageSchema = z.object({
   prompt: z
     .string()
     .max(120, { message: "Prompt must be less than 120 characters" }),
 })
 
-app.post(
+const app = new Hono<{ Bindings: Env }>().post(
   "/",
   zValidator("json", generateImageSchema, (result, c) => {
     if (!result.success) {
@@ -83,4 +81,4 @@ app.post(
   },
 )
 
-export const generate = app
+export { app as generate }

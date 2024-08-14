@@ -1,12 +1,19 @@
+import { z } from "zod"
 import { dbClient } from "../db"
 import { images } from "../db/schema"
 import { getEmbeddings } from "../lib/embedding"
 import { Env } from "../types"
 import { asc, desc, sql } from "drizzle-orm"
 import { Hono } from "hono"
+import { zValidator } from "@hono/zod-validator"
+
+const queryImagesSchema = z.object({
+  query: z.string().optional(),
+  cursor: z.string().optional(),
+})
 
 const app = new Hono<{ Bindings: Env }>()
-  .get("/", async (c) => {
+  .get("/", zValidator("query", queryImagesSchema), async (c) => {
     const query = c.req.query("query")
     const cursor = c.req.query("cursor")
 

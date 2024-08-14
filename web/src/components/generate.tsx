@@ -4,13 +4,38 @@ import React from "react"
 import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
-import { useQuery } from "@tanstack/react-query"
-import { cn } from "@/lib/utils"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { api, cn } from "@/lib/utils"
 
 import { GenerateInput } from "@/components/ui/input"
 import confetti from "canvas-confetti"
 import { ImageCard } from "@/components/image-card"
-import { RandomImages } from "@/types"
+
+const fetchRandomImages = async () => {
+  const response = await api.images.random[":count"].$get({
+    param: { count: "20" },
+  })
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok")
+  }
+
+  return response.json()
+}
+
+const generateImage = async (prompt: string) => {
+  const response = await api.generate.$post({
+    json: { prompt },
+  })
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok")
+  }
+
+  const blob = await response.blob()
+  const imageUrl = URL.createObjectURL(blob)
+  return imageUrl
+}
 
 export function Generate() {
   const [prompt, setPrompt] = React.useState("")
@@ -23,14 +48,7 @@ export function Generate() {
 
   const { data } = useQuery({
     queryKey: ["getRandomImages"],
-    queryFn: async () => {
-      const response = await fetch("/api/images/random/20")
-
-      if (!response.ok) throw new Error("Network response was not ok")
-      const result = (await response.json()) as RandomImages
-
-      return result
-    },
+    queryFn: fetchRandomImages,
     enabled: isDialogOpen,
   })
 
@@ -116,42 +134,29 @@ export function Generate() {
     frame()
   }
 
-  async function handleGenerate(
-    e: React.FormEvent<HTMLFormElement>,
-  ): Promise<void> {
-    e.preventDefault()
-    setIsGenerating(true)
-    try {
-      const response = await fetch("/api/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ prompt }),
-      })
-
-      if (true) {
-        const blob = await response.blob()
-        const imageUrl = URL.createObjectURL(blob)
-
-        setImageSrc(imageUrl)
-        setIsGenerating(false)
-
-        showConfetti()
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error)
+  const mutation = useMutation({
+    mutationFn: generateImage,
+    onMutate: () => {
+      setIsGenerating(true)
+    },
+    onSuccess: (imageUrl) => {
+      console.log("Image generated:", imageUrl)
+      setImageSrc(imageUrl)
       setIsGenerating(false)
-    }
-  }
+      showConfetti()
+    },
+    onError: (error) => {
+      console.error("Error generating image:", error)
+      setIsGenerating(false)
+    },
+  })
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
-      handleGenerate(e as unknown as React.FormEvent<HTMLFormElement>)
+      mutation.mutate(prompt)
     }
   }
 
-  console.log("all images", images)
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
@@ -197,7 +202,6 @@ export function Generate() {
               )}
             />
             {images.map((image, index) => {
-              console.log("checking image", image)
               return (
                 <div
                   key={image.id}

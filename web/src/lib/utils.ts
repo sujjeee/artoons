@@ -1,5 +1,8 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { hc } from "hono/client"
+import { APIResponses } from "@artoons/workers"
+import { env } from "@/env"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -26,3 +29,9 @@ export function getIdFromUrl(url: string): string | null {
     return null
   }
 }
+
+export const api = hc<APIResponses>("/api/", {
+  headers: {
+    Authorization: `Bearer ${env.NEXT_PUBLIC_BEARER_TOKEN}`,
+  },
+})

@@ -19,11 +19,7 @@ const generateImageSchema = z.object({
 
 const app = new Hono<{ Bindings: Env }>().post(
   "/",
-  zValidator("json", generateImageSchema, (result, c) => {
-    if (!result.success) {
-      return c.text("Invalid!", 400)
-    }
-  }),
+  zValidator("json", generateImageSchema),
   async (c) => {
     const body = c.req.valid("json")
     const prompt = body.prompt

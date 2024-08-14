@@ -20,6 +20,9 @@ importers:
 
   web:
     dependencies:
+      '@artoons/workers':
+        specifier: workspace:*
+        version: link:../workers
       '@aws-sdk/client-s3':
         specifier: ^3.623.0
         version: 3.629.0
@@ -77,6 +80,9 @@ importers:
       geist:
         specifier: ^1.3.1
         version: 1.3.1(next@14.2.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+      hono:
+        specifier: ^4.5.4
+        version: 4.5.5
       jiti:
         specifier: ^1.21.6
         version: 1.21.6
@@ -92,9 +98,6 @@ importers:
       next-themes:
         specifier: ^0.3.0
         version: 0.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      nuqs:
-        specifier: ^1.17.6
-        version: 1.17.8(next@14.2.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       react:
         specifier: ^18
         version: 18.3.1
@@ -2725,9 +2728,6 @@ packages:
     resolution: {integrity: sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw==}
     engines: {node: '>=16 || 14 >=14.17'}
 
-  mitt@3.0.1:
-    resolution: {integrity: sha512-vKivATfr97l2/QBCYAkXYDbrIWPM2IIKEl7YPhjCvKlG3kE2gm+uBo6nEXK3M5/Ffh/FLpKExzOQ3JJoJGFKBw==}
-
   ms@2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
 
@@ -2793,11 +2793,6 @@ packages:
   normalize-path@3.0.0:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
     engines: {node: '>=0.10.0'}
-
-  nuqs@1.17.8:
-    resolution: {integrity: sha512-JqsnzO+hJyjJE7ebuhpHMLA2iGY48e2xr0oJQFhj7kjUmDABL2XOup47rxF5TL/5b9jEsmU2t0lAKin1VdK1/A==}
-    peerDependencies:
-      next: '>=13.4 <14.0.2 || ^14.0.3'
 
   object-assign@4.1.1:
     resolution: {integrity: sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==}
@@ -6400,8 +6395,6 @@ snapshots:
 
   minipass@7.1.2: {}
 
-  mitt@3.0.1: {}
-
   ms@2.1.2: {}
 
   ms@2.1.3: {}
@@ -6461,11 +6454,6 @@ snapshots:
   node-forge@1.3.1: {}
 
   normalize-path@3.0.0: {}
-
-  nuqs@1.17.8(next@14.2.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)):
-    dependencies:
-      mitt: 3.0.1
-      next: 14.2.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
   object-assign@4.1.1: {}
 

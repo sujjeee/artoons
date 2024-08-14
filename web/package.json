@@ -15,6 +15,7 @@
     "db:seed": "dotenv tsx src/db/seed.ts"
   },
   "dependencies": {
+    "@artoons/workers": "workspace:*",
     "@aws-sdk/client-s3": "^3.623.0",
     "@aws-sdk/s3-request-presigner": "^3.623.0",
     "@hookform/resolvers": "^3.9.0",
@@ -34,12 +35,12 @@
     "dotenv-cli": "^7.4.2",
     "drizzle-orm": "^0.32.1",
     "geist": "^1.3.1",
+    "hono": "^4.5.4",
     "jiti": "^1.21.6",
     "lucide-react": "^0.418.0",
     "nanoid": "^5.0.7",
     "next": "14.2.5",
     "next-themes": "^0.3.0",
-    "nuqs": "^1.17.6",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.52.1",

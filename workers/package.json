@@ -1,0 +1,35 @@
+{
+  "name": "@artoons/workers",
+  "scripts": {
+    "dev": "wrangler dev src/index.ts",
+    "deploy": "wrangler deploy --minify src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:introspect": "drizzle-kit introspect",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "db:migrate": "tsx src/db/migrate.ts",
+    "db:seed": "tsx src/db/seed.ts"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.624.0",
+    "@aws-sdk/s3-request-presigner": "^3.624.0",
+    "@hono/zod-validator": "^0.2.2",
+    "@huggingface/inference": "^2.8.0",
+    "@libsql/client": "^0.8.1",
+    "drizzle-orm": "^0.32.2",
+    "hono": "^4.5.4",
+    "nanoid": "^5.0.7",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240529.0",
+    "dotenv": "^16.4.5",
+    "drizzle-kit": "^0.23.2",
+    "tsx": "^4.16.5",
+    "wrangler": "^3.57.1"
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "name": "illustrations",
+  "name": "@artoons/web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "typecheck": "tsc --noEmit",
     "db:generate": "dotenv drizzle-kit generate",
     "db:introspect": "dotenv drizzle-kit introspect",
     "db:migrate": "dotenv tsx src/db/migrate.ts",

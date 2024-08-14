@@ -2,14 +2,16 @@ import { createClient } from "@libsql/client"
 import { getEmbeddings } from "../lib/embedding"
 import { images } from "./schema"
 import { drizzle } from "drizzle-orm/libsql"
-import * as schema from "@db/schema"
+import * as schema from "../db/schema"
 import { config } from "dotenv"
 import fs from "fs"
 
 config({ path: ".dev.vars" })
 
 async function seedData() {
+  // create a dummy data json or use fakerJS
   const rawData = fs.readFileSync("data.json", "utf8")
+
   const fakeData = JSON.parse(rawData) as {
     id: string
     prompt: string
@@ -27,7 +29,9 @@ async function seedData() {
       const embedding = await getEmbeddings({
         text: image.prompt,
       })
+
       const embeddingBuffer = Buffer.from(new Float32Array(embedding).buffer)
+
       await db.insert(images).values({
         id: image.id,
         prompt: image.prompt,
@@ -36,6 +40,7 @@ async function seedData() {
     }),
   )
 
+  // [ ~ Testing vector search ~ ]
   //   const embedding = await getEmbeddings("standing bear")
   //   const embeddingBuffer = Buffer.from(new Float32Array(embedding).buffer)
 

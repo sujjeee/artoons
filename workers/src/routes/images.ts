@@ -1,29 +1,24 @@
-import { dbClient } from "@db"
-import { images } from "@db/schema"
-import { getEmbeddings } from "@lib/embedding"
-import { Env } from "@types"
+import { dbClient } from "../db"
+import { images } from "../db/schema"
+import { getEmbeddings } from "../lib/embedding"
+import { Env } from "../types"
 import { asc, desc, sql } from "drizzle-orm"
 import { Hono } from "hono"
-// import { cache } from "hono/cache"
 
 const app = new Hono<{ Bindings: Env }>()
 
 app.get("/", async (c) => {
-  // queries
   const query = c.req.query("query")
   const cursor = c.req.query("cursor")
 
-  // parse queries
   const pageAsNumber = Number(cursor)
   const fallbackPage =
     Number.isNaN(pageAsNumber) || pageAsNumber < 1 ? 1 : pageAsNumber
   const limit = 10
   const offset = fallbackPage > 0 ? (fallbackPage - 1) * limit : 0
 
-  // create database client
   const db = dbClient(c.env)
 
-  // get embedding buffer, if query is provided
   let embeddingBuffer = undefined
 
   if (query) {
@@ -35,7 +30,6 @@ app.get("/", async (c) => {
     embeddingBuffer = Buffer.from(new Float32Array(embedding).buffer)
   }
 
-  // get the data based on queries
   const { data, count } = await db.transaction(async (trx) => {
     const data = await trx
       .select({
@@ -75,39 +69,27 @@ app.get("/", async (c) => {
     }
   })
 
-  //return the data
   return c.json({
     data,
     count,
   })
 })
 
-app.get(
-  "/random/:count",
-  // cache({
-  //   cacheName: "random-images-cache",
-  //   cacheControl: "max-age=3600",
-  // }),
-  async (c) => {
-    // params
-    const count = c.req.param("count")
+app.get("/random/:count", async (c) => {
+  const count = c.req.param("count")
+  const db = dbClient(c.env)
 
-    // create database client
-    const db = dbClient(c.env)
+  const randomImages = await db.query.images.findMany({
+    columns: {
+      id: true,
+    },
+    limit: Number(count),
+    orderBy: sql`RANDOM()`,
+  })
 
-    const randomImages = await db.query.images.findMany({
-      columns: {
-        id: true,
-      },
-      limit: Number(count),
-      orderBy: sql`RANDOM()`,
-    })
-
-    //return the data
-    return c.json({
-      data: randomImages,
-    })
-  },
-)
+  return c.json({
+    data: randomImages,
+  })
+})
 
 export const image = app

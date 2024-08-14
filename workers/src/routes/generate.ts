@@ -1,15 +1,15 @@
-import { Env } from "@types"
+import { Env } from "../types"
 import { Hono } from "hono"
 import { zValidator } from "@hono/zod-validator"
 import { z } from "zod"
 import { HfInference } from "@huggingface/inference"
-import { generateUniqueId } from "@lib/utils"
-import { createS3Client } from "@lib/r2"
+import { generateUniqueId } from "../lib/utils"
+import { createS3Client } from "../lib/r2"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import { PutObjectCommand } from "@aws-sdk/client-s3"
-import { dbClient } from "@db"
-import { images } from "@db/schema"
-import { getEmbeddings } from "@lib/embedding"
+import { dbClient } from "../db"
+import { images } from "../db/schema"
+import { getEmbeddings } from "../lib/embedding"
 
 const app = new Hono<{ Bindings: Env }>()
 
@@ -27,26 +27,19 @@ app.post(
     }
   }),
   async (c) => {
-    // request body
     const body = c.req.valid("json")
     const prompt = body.prompt
 
-    // create hugging face client
     const model = new HfInference(c.env.HUGGINGFACE_KEY)
 
-    // generate image blob
     const blobImage = (await model.request({
       model: "alvdansen/littletinies",
       inputs: body.prompt,
     })) as Blob
 
-    // generate uniue image id
     const imageId = generateUniqueId()
-
-    // create s3 client
     const r2 = createS3Client(c.env)
 
-    // get signed url
     const signedUrl = await getSignedUrl(
       r2,
       new PutObjectCommand({
@@ -56,7 +49,6 @@ app.post(
       { expiresIn: 60 },
     )
 
-    // upload image to r2
     const uploadResponse = await fetch(signedUrl, {
       method: "PUT",
       body: blobImage,
@@ -65,7 +57,6 @@ app.post(
       },
     })
 
-    // Check if the upload was successful, update the database
     if (uploadResponse.ok) {
       const db = dbClient(c.env)
 
@@ -83,10 +74,8 @@ app.post(
       })
     }
 
-    // Convert Blob to ArrayBuffer
     const imageArrayBuffer = await blobImage.arrayBuffer()
 
-    //return the image
     return c.body(imageArrayBuffer, 200, {
       "Content-Type": "image/jpeg",
       "Content-Disposition": `inline; filename="${prompt}.jpeg"`,

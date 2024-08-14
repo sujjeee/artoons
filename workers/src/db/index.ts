@@ -1,7 +1,7 @@
 import { createClient } from "@libsql/client"
 import { drizzle, LibSQLDatabase } from "drizzle-orm/libsql"
-import { Env } from "@types"
-import * as schema from "@db/schema"
+import { Env } from "../types"
+import * as schema from "../db/schema"
 
 export function dbClient(env: Env): LibSQLDatabase<typeof schema> {
   const { DATABASE_AUTH_TOKEN, DATABASE_URL } = env

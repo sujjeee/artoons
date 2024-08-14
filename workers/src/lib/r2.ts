@@ -1,5 +1,5 @@
 import { S3Client } from "@aws-sdk/client-s3"
-import { Env } from "@types"
+import { Env } from "../types"
 
 export function createS3Client(env: Env): S3Client {
   const { R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY } = env

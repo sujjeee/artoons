@@ -25,7 +25,7 @@
 - **Backend Server:** [Cloudflare Workers](https://workers.cloudflare.com)
 - **Frontend Deployment:** [Vercel](https://vercel.com)
 - **Monorepo Tool:** [Turborepo](https://turbo.build/repo)
-- **AI Model Hosting:** [Hugging Face](https://huggingface.co)
+- **AI Model:** [Hugging Face](https://huggingface.co)
 
 ## Running Locally
 

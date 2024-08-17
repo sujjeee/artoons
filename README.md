@@ -2,7 +2,7 @@
 
 <kbd>
 <a href="https://artoons.vercel.app">
-  <img alt="Artoons - Cartoon Style AI Images!" src="https://artoons.vercel.app/og-image.png">
+  <img alt="Artoons - Cartoon Style AI Images!" src="https://artoons.vercel.app/opengraph-image.png">
 </a>
 </kbd>
 

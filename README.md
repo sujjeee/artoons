@@ -2,7 +2,7 @@
 
 <kbd>
 <a href="https://artoons.vercel.app">
-  <img alt="Artoons - Cartoon Style AI Images!" src="https://artoons.vercel.app/og-image.png">
+  <img alt="Artoons - Cartoon Style AI Images!" src="https://artoons.vercel.app/opengraph-image.png">
 </a>
 </kbd>
 
@@ -25,7 +25,7 @@
 - **Backend Server:** [Cloudflare Workers](https://workers.cloudflare.com)
 - **Frontend Deployment:** [Vercel](https://vercel.com)
 - **Monorepo Tool:** [Turborepo](https://turbo.build/repo)
-- **AI Model Hosting:** [Hugging Face](https://huggingface.co)
+- **AI Model:** [Hugging Face](https://huggingface.co)
 
 ## Running Locally
 

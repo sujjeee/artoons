@@ -50,3 +50,11 @@
    ```
 
 5. Don't forget to push the database schema
+
+## How do I deploy this?
+
+Follow the deployment guides for [Vercel](https://vercel.com/docs/monorepos/turborepo).
+
+## Contributing
+
+Contributions are welcome! Please open an issue if you have any questions or suggestions. Your contributions will be acknowledged.

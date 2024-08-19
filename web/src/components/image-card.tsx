@@ -1,12 +1,14 @@
 "use client"
 
 import React from "react"
-import { Icons } from "@/components/icons"
-import { Button } from "@/components/ui/button"
+import Image from "next/image"
+
+import { CheckIcon } from "lucide-react"
+
 import { useImageStore } from "@/lib/store/use-image"
 import { cn, getIdFromUrl } from "@/lib/utils"
-import { CheckIcon } from "lucide-react"
-import Image from "next/image"
+import { Button } from "@/components/ui/button"
+import { Icons } from "@/components/icons"
 
 interface ImageCardProps {
   imgUrl: string | null
@@ -94,7 +96,7 @@ export function ImageCard({
   }
 
   return (
-    <div className="rounded-2xl overflow-hidden shadow-sm">
+    <div className="overflow-hidden rounded-2xl shadow-sm">
       <div className="flex w-full flex-col rounded-xl bg-gray-50 p-2 pb-2">
         {prompt && imgUrl && (
           <div
@@ -113,7 +115,7 @@ export function ImageCard({
               width={100}
               height={100}
               className={cn(
-                "rounded-xl object-cover object-top size-full pointer-events-none",
+                "pointer-events-none size-full rounded-xl object-cover object-top",
                 {
                   "blur-md": isImageLoading,
                 },
@@ -123,7 +125,7 @@ export function ImageCard({
           </div>
         )}
 
-        <div className="mt-2 rounded-xl p-1 ">
+        <div className="mt-2 rounded-xl p-1">
           <div className="flex w-full items-center justify-between">
             <div className="relative flex items-center justify-start gap-1 text-xs text-gray-400">
               Prompt
@@ -131,7 +133,7 @@ export function ImageCard({
                 variant={"ghost"}
                 size={"icon"}
                 title="Copy to clipboard"
-                className="size-5 p-0.5 "
+                className="size-5 p-0.5"
                 onClick={onCopy}
               >
                 {hasCheckIcon ? (
@@ -142,24 +144,24 @@ export function ImageCard({
               </Button>
             </div>
             {imgUrl && isShareable && (
-              <div className="items-center justify-center flex gap-1.5 text-gray-600">
+              <div className="flex items-center justify-center gap-1.5 text-gray-600">
                 <Button
                   variant={"ghost"}
                   size={"icon"}
                   title="Download"
-                  className="size-5 p-0.5 animate-jelly"
+                  className="animate-jelly size-5 p-0.5"
                   onClick={onDownload}
                 >
-                  <Icons.download className="size-3.5 text-muted-foreground" />
+                  <Icons.download className="text-muted-foreground size-3.5" />
                 </Button>
                 <Button
                   variant={"ghost"}
                   size={"icon"}
                   title="Share"
-                  className="size-5 p-0.5 animate-jelly"
+                  className="animate-jelly size-5 p-0.5"
                   onClick={onShare}
                 >
-                  <Icons.share className="size-3.5 text-muted-foreground" />
+                  <Icons.share className="text-muted-foreground size-3.5" />
                 </Button>
               </div>
             )}

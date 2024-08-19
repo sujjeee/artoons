@@ -1,6 +1,12 @@
 {
   "name": "sample",
   "private": true,
+  "license": "MIT",
+  "type": "module",
+  "author": {
+    "name": "sujjeee",
+    "url": "https://twitter.com/sujjeeee"
+  },
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
@@ -8,7 +14,10 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "prettier": "^3.2.5",
+    "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "prettier": "^3.3.3",
+    "prettier-plugin-tailwindcss": "^0.6.6",
     "turbo": "^2.0.12",
     "typescript": "^5.4.5"
   },

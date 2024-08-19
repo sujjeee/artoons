@@ -8,6 +8,7 @@ import React, {
   useMemo,
   useRef,
 } from "react"
+
 import confetti from "canvas-confetti"
 import type {
   GlobalOptions as ConfettiGlobalOptions,

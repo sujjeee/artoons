@@ -1,10 +1,12 @@
+import fs from "fs"
+
 import { createClient } from "@libsql/client"
+import { config } from "dotenv"
+import { drizzle } from "drizzle-orm/libsql"
+
+import * as schema from "../db/schema"
 import { getEmbeddings } from "../lib/embedding"
 import { images } from "./schema"
-import { drizzle } from "drizzle-orm/libsql"
-import * as schema from "../db/schema"
-import { config } from "dotenv"
-import fs from "fs"
 
 config({ path: ".dev.vars" })
 

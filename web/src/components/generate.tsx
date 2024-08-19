@@ -1,13 +1,15 @@
 "use client"
 
 import React from "react"
-import { Icons } from "@/components/icons"
+
+import { useMutation, useQuery } from "@tanstack/react-query"
+import confetti from "canvas-confetti"
+
+import { api, cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
-import { useMutation, useQuery } from "@tanstack/react-query"
-import { api, cn } from "@/lib/utils"
 import { GenerateInput } from "@/components/ui/input"
-import confetti from "canvas-confetti"
+import { Icons } from "@/components/icons"
 import { ImageCard } from "@/components/image-card"
 
 const fetchRandomImages = async () => {
@@ -164,12 +166,12 @@ export function Generate() {
         </Button>
       </DialogTrigger>
       <DialogContent
-        className={cn("bg-gray-50 sm:rounded-2xl p-0 outline-none", {
-          "p-2 gap-2 w-full max-h-[530px] h-full": !imageSrc,
+        className={cn("bg-gray-50 p-0 outline-none sm:rounded-2xl", {
+          "h-full max-h-[530px] w-full gap-2 p-2": !imageSrc,
         })}
       >
         {imageSrc ? (
-          <div className=" relative size-full flex flex-col  gap-4 justify-center items-center">
+          <div className="relative flex size-full flex-col items-center justify-center gap-4">
             <ImageCard
               imgUrl={imageSrc}
               prompt={prompt}
@@ -190,13 +192,13 @@ export function Generate() {
             </Button>
           </div>
         ) : (
-          <div className="relative w-full h-full rounded-xl overflow-hidden outline-none">
+          <div className="relative h-full w-full overflow-hidden rounded-xl outline-none">
             <div
               style={{
                 backgroundImage: `url(${"https://storage.sujjeee.com/images/akifsby6od.jpeg"})`,
               }}
               className={cn(
-                "absolute inset-0 object-cover object-top w-full -z-10 bg-cover bg-center transition-opacity duration-1000",
+                "absolute inset-0 -z-10 w-full bg-cover bg-center object-cover object-top transition-opacity duration-1000",
                 showPlaceholder ? "opacity-100" : "opacity-0",
               )}
             />
@@ -208,7 +210,7 @@ export function Generate() {
                     backgroundImage: `url(${image.id})`,
                   }}
                   className={cn(
-                    "absolute inset-0 object-cover object-top w-full -z-10 bg-cover bg-center transition-opacity duration-1000",
+                    "absolute inset-0 -z-10 w-full bg-cover bg-center object-cover object-top transition-opacity duration-1000",
                     {
                       "opacity-100": !showPlaceholder && index === currentIndex,
                       "opacity-0": showPlaceholder || index !== currentIndex,
@@ -219,7 +221,7 @@ export function Generate() {
             })}
 
             <div
-              className={cn("absolute inset-0  pointer-events-none", {
+              className={cn("pointer-events-none absolute inset-0", {
                 "bg-gradient-to-t from-black/50 to-transparent":
                   !isGenerating && imageSrc === null,
                 "bg-black/50": imageSrc === null && isGenerating,
@@ -227,9 +229,9 @@ export function Generate() {
             />
             {isGenerating && (
               <div className="absolute top-0 size-full backdrop-blur-sm">
-                <div className="size-full flex justify-center items-center  flex-col gap-4">
+                <div className="flex size-full flex-col items-center justify-center gap-4">
                   <Icons.imageLoader className="size-8 text-white" />
-                  <span className="max-w-[320px] text-center text-white ">
+                  <span className="max-w-[320px] text-center text-white">
                     Please wait, your image is generating and it can take up to
                     15-20 seconds.
                   </span>
@@ -237,7 +239,7 @@ export function Generate() {
               </div>
             )}
             {!isGenerating && imageSrc === null && (
-              <div className="absolute p-2 bottom-0 w-full">
+              <div className="absolute bottom-0 w-full p-2">
                 <GenerateInput
                   autoFocus
                   placeholder="Type your prompt here"

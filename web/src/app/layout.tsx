@@ -1,10 +1,12 @@
 import "@/styles/globals.css"
-import { cn } from "@/lib/utils"
-import { Providers } from "@/components/providers"
-import { Inter } from "next/font/google"
-import { Info } from "@/components/info"
-import { Header } from "@/components/header"
+
 import { Metadata } from "next"
+import { Inter } from "next/font/google"
+
+import { cn } from "@/lib/utils"
+import { Header } from "@/components/header"
+import { Info } from "@/components/info"
+import { Providers } from "@/components/providers"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -27,7 +29,7 @@ export default function RootLayout({
           <Header />
           {children}
         </Providers>
-        <div className="fixed bottom-1 right-2 sm:bottom-2 sm:right-4 z-50 ">
+        <div className="fixed bottom-1 right-2 z-50 sm:bottom-2 sm:right-4">
           <Info />
         </div>
       </body>

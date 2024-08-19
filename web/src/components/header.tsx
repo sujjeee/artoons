@@ -1,9 +1,10 @@
 import React from "react"
+
 import { Generate } from "./generate"
 
 export function Header() {
   return (
-    <header className="w-full flex items-center py-4">
+    <header className="flex w-full items-center py-4">
       <div className="ml-auto">
         <Generate />{" "}
       </div>

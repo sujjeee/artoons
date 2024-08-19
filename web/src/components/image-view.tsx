@@ -1,8 +1,10 @@
-import { useImageStore } from "@/lib/store/use-image"
 import React from "react"
+
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden"
+
+import { useImageStore } from "@/lib/store/use-image"
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { ImageCard } from "@/components/image-card"
-import * as VisuallyHidden from "@radix-ui/react-visually-hidden"
 
 export function ImageView() {
   const { data, setData } = useImageStore()
@@ -31,7 +33,7 @@ export function ImageView() {
       <DialogTitle asChild>
         <VisuallyHidden.Root>Image Preview</VisuallyHidden.Root>
       </DialogTitle>
-      <DialogContent className="bg-gray-50 p-0 sm:rounded-2xl outline-none">
+      <DialogContent className="bg-gray-50 p-0 outline-none sm:rounded-2xl">
         {" "}
         <ImageCard
           imgUrl={data.imageUrl}

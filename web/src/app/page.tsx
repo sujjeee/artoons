@@ -1,14 +1,16 @@
 "use client"
 
 import React, { useState } from "react"
-import { Emoji } from "@/components/emojis"
-import { SearchInput } from "@/components/ui/input"
+
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { useInView } from "react-intersection-observer"
-import { useDebounce } from "@/hooks/use-debounce"
-import { Skeleton } from "@/components/ui/skeleton"
-import { ImagesShell } from "@/components/shells"
+
 import { api } from "@/lib/utils"
+import { useDebounce } from "@/hooks/use-debounce"
+import { SearchInput } from "@/components/ui/input"
+import { Skeleton } from "@/components/ui/skeleton"
+import { Emoji } from "@/components/emojis"
+import { ImagesShell } from "@/components/shells"
 
 export default function HomePage() {
   const { ref, inView } = useInView()
@@ -60,30 +62,30 @@ export default function HomePage() {
   }, [data])
 
   return (
-    <div className="py-32 w-full mx-auto flex flex-col items-center justify-center">
+    <div className="mx-auto flex w-full flex-col items-center justify-center py-32">
       <div className="flex items-center justify-center pb-12">
-        <div className="font-semibold text-lg mr-2">Artoons</div>
+        <div className="mr-2 text-lg font-semibold">Artoons</div>
         <Emoji />
       </div>
-      <div className="sticky top-0 z-10 py-1.5 w-full justify-center items-center bg-background flex ">
-        <div className="flex justify-center items-center max-w-xl w-full ">
+      <div className="bg-background sticky top-0 z-10 flex w-full items-center justify-center py-1.5">
+        <div className="flex w-full max-w-xl items-center justify-center">
           <SearchInput
             placeholder="Search for anything"
             spellCheck={false}
-            className="h-12 bg-gray-50 rounded-full text-sm w-full"
+            className="h-12 w-full rounded-full bg-gray-50 text-sm"
             value={searchQuery || ""}
             onChange={(e) => setSearchQuery(e.target.value || undefined)}
           />
         </div>
       </div>
-      <div className="pt-36 w-full">
+      <div className="w-full pt-36">
         <ImagesShell images={images} ref={ref} hasNextPage={hasNextPage} />
         {isLoading && (
-          <section className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 w-full pt-2">
+          <section className="grid w-full grid-cols-2 gap-2 pt-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
             {Array.from({ length: 10 }).map((_, idx) => (
               <Skeleton
                 key={idx}
-                className="aspect-[0.9] rounded-xl size-full"
+                className="aspect-[0.9] size-full rounded-xl"
               />
             ))}
           </section>

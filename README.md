@@ -41,15 +41,25 @@
    pnpm install
    ```
 
-3. Make sure to copy the web and worker `.env.example` or `.dev.vars.example` files to `.env` or `.dev.vars` and update the variables accordingly
+3. Copy the `.env.example` to `.env` and update the variables.
 
-4. Start the development server
+   ```bash
+   cp web/.env.example web/.env
+   cp workers/.dev.vars.example workers/.dev.vars
+   ```
+
+4. Migrate the database schema
+
+   ```bash
+   cd workers
+   pnpm db:push
+   ```
+
+5. Start the development server
 
    ```bash
    pnpm run dev
    ```
-
-5. Don't forget to push the database schema
 
 ## How do I deploy this?
 

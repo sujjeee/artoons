@@ -10,7 +10,6 @@ module.exports = {
     "next/core-web-vitals",
     "plugin:@typescript-eslint/recommended-type-checked",
     "prettier",
-    "turbo",
     "plugin:tailwindcss/recommended",
   ],
   rules: {

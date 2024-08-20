@@ -30,7 +30,7 @@ export function ImageCard({
   const [isImageLoading, setIsImageLoading] = React.useState(true)
 
   function onCopy() {
-    navigator.clipboard.writeText(prompt ?? "")
+    void navigator.clipboard.writeText(prompt ?? "")
     setHasCheckIcon(true)
 
     setTimeout(() => {
@@ -97,7 +97,7 @@ export function ImageCard({
 
   return (
     <div className="overflow-hidden rounded-2xl shadow-sm">
-      <div className="flex w-full flex-col rounded-xl bg-gray-50 p-2 pb-2">
+      <div className="flex w-full flex-col rounded-xl bg-gray-50 p-2">
         {prompt && imgUrl && (
           <div
             className="aspect-[1] size-full cursor-pointer select-none"
@@ -152,7 +152,7 @@ export function ImageCard({
                   className="animate-jelly size-5 p-0.5"
                   onClick={onDownload}
                 >
-                  <Icons.download className="text-muted-foreground size-3.5" />
+                  <Icons.download className="size-3.5 text-muted-foreground" />
                 </Button>
                 <Button
                   variant={"ghost"}
@@ -161,7 +161,7 @@ export function ImageCard({
                   className="animate-jelly size-5 p-0.5"
                   onClick={onShare}
                 >
-                  <Icons.share className="text-muted-foreground size-3.5" />
+                  <Icons.share className="size-3.5 text-muted-foreground" />
                 </Button>
               </div>
             )}

@@ -14,14 +14,14 @@ export function Info() {
     <Dialog>
       <DialogTrigger asChild>
         <Button variant="ghost" size={"icon"}>
-          <CircleHelp className="text-muted-foreground size-4" />
+          <CircleHelp className="size-4 text-muted-foreground" />
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>About artoons</DialogTitle>
         </DialogHeader>
-        <div className="text-muted-foreground flex flex-col justify-center gap-4 text-sm">
+        <div className="flex flex-col justify-center gap-4 text-sm text-muted-foreground">
           <span>
             Artoons is a free, open-source website designed to generate cute
             cartoon-style illustrations.

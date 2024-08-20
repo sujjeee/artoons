@@ -44,7 +44,7 @@ export default function HomePage() {
 
   React.useEffect(() => {
     if (inView && hasNextPage) {
-      fetchNextPage()
+      void fetchNextPage()
     }
   }, [inView, fetchNextPage, hasNextPage])
 
@@ -67,7 +67,7 @@ export default function HomePage() {
         <div className="mr-2 text-lg font-semibold">Artoons</div>
         <Emoji />
       </div>
-      <div className="bg-background sticky top-0 z-10 flex w-full items-center justify-center py-1.5">
+      <div className="sticky top-0 z-10 flex w-full items-center justify-center bg-background py-1.5">
         <div className="flex w-full max-w-xl items-center justify-center">
           <SearchInput
             placeholder="Search for anything"

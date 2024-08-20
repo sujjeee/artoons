@@ -1,5 +1,5 @@
 import { env } from "@/env"
-import { APIResponses } from "@artoons/workers"
+import { type APIResponses } from "@artoons/workers"
 import { clsx, type ClassValue } from "clsx"
 import { hc } from "hono/client"
 import { twMerge } from "tailwind-merge"

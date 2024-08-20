@@ -70,7 +70,7 @@ export function Generate() {
           img.onload = () => resolve(url)
           img.onerror = (error) => {
             console.error("Image load error:", error)
-            reject(error)
+            reject(new Error(`Failed to load image: ${url.id}`))
           }
           img.src = url.id
         })
@@ -88,7 +88,7 @@ export function Generate() {
     }
 
     if (images.length > 0) {
-      preloadImages()
+      void preloadImages()
     }
   }, [images])
 
@@ -112,7 +112,7 @@ export function Generate() {
     const frame = () => {
       if (Date.now() > end) return
 
-      confetti({
+      void confetti({
         particleCount: 2,
         angle: 60,
         spread: 55,
@@ -120,7 +120,7 @@ export function Generate() {
         origin: { x: 0, y: 0.5 },
         colors: colors,
       })
-      confetti({
+      void confetti({
         particleCount: 2,
         angle: 120,
         spread: 55,
@@ -192,7 +192,7 @@ export function Generate() {
             </Button>
           </div>
         ) : (
-          <div className="relative h-full w-full overflow-hidden rounded-xl outline-none">
+          <div className="relative size-full overflow-hidden rounded-xl outline-none">
             <div
               style={{
                 backgroundImage: `url(${"https://storage.sujjeee.com/images/akifsby6od.jpeg"})`,

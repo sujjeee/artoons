@@ -22,7 +22,7 @@ export const ImagesShell = React.forwardRef<HTMLDivElement, ImagesSectionProps>(
           <>
             <div
               ref={ref}
-              className="bg-muted aspect-[0.9] size-full animate-pulse rounded-xl"
+              className="aspect-[0.9] size-full animate-pulse rounded-xl bg-muted"
             />
             {Array.from({ length: 9 }).map((_, idx) => (
               <Skeleton

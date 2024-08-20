@@ -6,7 +6,7 @@ import { z } from "zod"
 import { dbClient } from "../db"
 import { images } from "../db/schema"
 import { getEmbeddings } from "../lib/embedding"
-import { Env } from "../types"
+import { type Env } from "../types"
 
 const queryImagesSchema = z.object({
   query: z.string().optional(),

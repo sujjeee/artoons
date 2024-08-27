@@ -24,7 +24,7 @@
     "@hono/zod-validator": "^0.2.2",
     "@huggingface/inference": "^2.8.0",
     "@libsql/client": "^0.8.1",
-    "drizzle-orm": "^0.32.2",
+    "drizzle-orm": "^0.33.0",
     "hono": "^4.5.4",
     "nanoid": "^5.0.7",
     "zod": "^3.23.8"

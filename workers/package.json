@@ -32,7 +32,7 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240529.0",
     "dotenv": "^16.4.5",
-    "drizzle-kit": "^0.23.2",
+    "drizzle-kit": "^0.24.0",
     "tsx": "^4.16.5",
     "wrangler": "^3.57.1"
   }

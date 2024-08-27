@@ -23,7 +23,7 @@
     "@aws-sdk/s3-request-presigner": "^3.624.0",
     "@hono/zod-validator": "^0.2.2",
     "@huggingface/inference": "^2.8.0",
-    "@libsql/client": "^0.8.1",
+    "@libsql/client": "^0.10.0",
     "drizzle-orm": "^0.32.2",
     "hono": "^4.5.4",
     "nanoid": "^5.0.7",

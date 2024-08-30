@@ -145,7 +145,7 @@ export const Icons = {
         fill="currentColor"
         fillRule="evenodd"
         clipRule="evenodd"
-      ></path>
+      />
     </svg>
   ),
   download: (props: IconProps) => (

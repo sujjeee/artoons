@@ -1,5 +1,4 @@
-import { env } from "@/env"
-import { type APIResponses } from "@artoons/workers"
+import type { APIResponses } from "@artoons/workers"
 import { clsx, type ClassValue } from "clsx"
 import { hc } from "hono/client"
 import { twMerge } from "tailwind-merge"
@@ -30,8 +29,4 @@ export function getIdFromUrl(url: string): string | null {
   }
 }
 
-export const api = hc<APIResponses>("/api/", {
-  headers: {
-    Authorization: `Bearer ${env.NEXT_PUBLIC_BEARER_TOKEN}`,
-  },
-})
+export const api = hc<APIResponses>("/api/")

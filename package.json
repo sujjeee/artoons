@@ -13,9 +13,17 @@
     "dev:web": "pnpm --filter=web dev",
     "dev:workers": "pnpm --filter=workers dev",
     "preview": "turbo run preview",
-    "typecheck": "turbo run typecheck"
+    "typecheck": "turbo run typecheck",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --write --unsafe .",
+    "format": "biome format .",
+    "format:fix": "biome format --write .",
+    "code-check": "biome chehaack .",
+    "code-check:fix": "biome check --write --unsafe .",
+    "biome:ci": "biome ci ."
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.8.3",
     "turbo": "^2.0.12",
     "typescript": "^5.4.5"
   },

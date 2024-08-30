@@ -10,7 +10,7 @@ import { images } from "../db/schema"
 import { getEmbeddings } from "../lib/embedding"
 import { createS3Client } from "../lib/r2"
 import { generateUniqueId } from "../lib/utils"
-import { type Env } from "../types"
+import type { Env } from "../types"
 
 const generateImageSchema = z.object({
   prompt: z

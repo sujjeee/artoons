@@ -1,7 +1,7 @@
 import { HfInference } from "@huggingface/inference"
 import { config } from "dotenv"
 
-import { type Env } from "../types"
+import type { Env } from "../types"
 
 config({ path: ".dev.vars" })
 

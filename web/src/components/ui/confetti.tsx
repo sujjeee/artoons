@@ -1,5 +1,6 @@
 import type { ReactNode } from "react"
-import React, {
+import type React from "react"
+import {
   createContext,
   forwardRef,
   useCallback,

@@ -1,5 +1,3 @@
-import React from "react"
-
 import { Generate } from "./generate"
 
 export function Header() {

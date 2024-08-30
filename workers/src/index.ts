@@ -9,7 +9,6 @@ app.get("/", (c) => {
   return c.text("Welcome to artoons!")
 })
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const routes = app.route("/images", image).route("/generate", generate)
 
 export type APIResponses = typeof routes

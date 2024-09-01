@@ -11,6 +11,7 @@ import { getEmbeddings } from "../lib/embedding"
 import { createS3Client } from "../lib/r2"
 import { generateUniqueId } from "../lib/utils"
 import type { Env } from "../types"
+import { rateLimitMiddleware } from "../middlewares"
 
 const generateImageSchema = z.object({
   prompt: z
@@ -21,6 +22,7 @@ const generateImageSchema = z.object({
 const app = new Hono<{ Bindings: Env }>().post(
   "/",
   zValidator("json", generateImageSchema),
+  rateLimitMiddleware("GENERATE_RATE_LIMITER"),
   async (c) => {
     const body = c.req.valid("json")
     const prompt = body.prompt

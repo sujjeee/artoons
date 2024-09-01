@@ -11,5 +11,7 @@ export type Env = {
 
   NEXT_APP_URL: string
 
-  BEARER_TOKEN: string
+  ROOT_RATE_LIMITER: any
+  IMAGES_RATE_LIMITER: any
+  GENERATE_RATE_LIMITER: any
 }

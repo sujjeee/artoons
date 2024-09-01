@@ -2,10 +2,11 @@ import { Hono } from "hono"
 
 import { generate } from "./routes/generate"
 import { image } from "./routes/images"
+import { rateLimitMiddleware } from "./middlewares"
 
 const app = new Hono()
 
-app.get("/", (c) => {
+app.get("/", rateLimitMiddleware("ROOT_RATE_LIMITER"), (c) => {
   return c.text("Welcome to artoons!")
 })
 

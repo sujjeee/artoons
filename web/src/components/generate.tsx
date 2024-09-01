@@ -13,9 +13,7 @@ import { Icons } from "@/components/icons"
 import { ImageCard } from "@/components/image-card"
 
 const fetchRandomImages = async () => {
-  const response = await api.images.random[":count"].$get({
-    param: { count: "20" },
-  })
+  const response = await api.images.random.$get()
 
   if (!response.ok) {
     throw new Error("Network response was not ok")

@@ -1,5 +1,6 @@
 import { Context, Next } from "hono"
 import { Env } from "./types"
+import { HTTPException } from "hono/http-exception"
 
 export const rateLimitMiddleware = (rateLimiterKey: keyof Env) => {
   return async (c: Context<{ Bindings: Env }>, next: Next) => {
@@ -8,7 +9,9 @@ export const rateLimitMiddleware = (rateLimiterKey: keyof Env) => {
     const { success } = await rateLimiter.limit({ key: ipAddress })
 
     if (!success) {
-      return c.text("Too many requests. Please try again later.", 429)
+      throw new HTTPException(429, {
+        message: "Too many requests. Please try again later.",
+      })
     }
 
     await next()

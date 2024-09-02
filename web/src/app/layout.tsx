@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils"
 import { Header } from "@/components/header"
 import { Info } from "@/components/info"
 import { Providers } from "@/components/providers"
+import { Toaster } from "@/components/ui/toaster"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -32,6 +33,7 @@ export default function RootLayout({
         <div className="fixed bottom-1 right-2 z-50 sm:bottom-2 sm:right-4">
           <Info />
         </div>
+        <Toaster />
       </body>
     </html>
   )

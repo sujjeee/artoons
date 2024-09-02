@@ -8,10 +8,7 @@ interface CheckTextProps {
   text: string
 }
 
-export async function isCleanText({
-  env,
-  text,
-}: CheckTextProps): Promise<void> {
+export async function isCleanText({ env, text }: CheckTextProps) {
   const apiKey = env ? env.GROQ_API_KEY : process.env.GROQ_API_KEY
   const groq = new Groq({ apiKey })
 
@@ -42,11 +39,18 @@ export async function isCleanText({
     if (parsedResponse !== "true") {
       throw new HTTPException(400, {
         message:
-          "Use short or straight forward words. Like a man, bird, etc. Please try again or raise an issue on GitHub.",
+          "Please use appropriate language. Avoid using offensive or inappropriate words.",
       })
     }
   } catch (error) {
-    console.error("Error:", error)
+    console.error(error)
+
+    if (error instanceof HTTPException) {
+      throw new HTTPException(500, {
+        message: error.message,
+      })
+    }
+
     throw new HTTPException(500, {
       message:
         "Unknown NSFW error occurred. Please try again or raise an issue on GitHub.",

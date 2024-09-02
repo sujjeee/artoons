@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { GenerateInput } from "@/components/ui/input"
 import { Icons } from "@/components/icons"
 import { ImageCard } from "@/components/image-card"
+import { toast } from "sonner"
 
 const fetchRandomImages = async () => {
   const response = await api.images.random.$get()
@@ -27,10 +28,10 @@ const generateImage = async (prompt: string) => {
     json: { prompt },
   })
 
-  console.log({ response })
-
+  // Check if the response is not OK
   if (!response.ok) {
-    throw new Error("Network response was not ok")
+    const errorMessage = await response.text()
+    throw new Error(errorMessage)
   }
 
   const blob = await response.blob()
@@ -146,6 +147,7 @@ export function Generate() {
       showConfetti()
     },
     onError: (error) => {
+      toast.error(error.message)
       setIsGenerating(false)
     },
   })

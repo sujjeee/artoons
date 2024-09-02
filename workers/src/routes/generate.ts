@@ -12,6 +12,8 @@ import { createS3Client } from "../lib/r2"
 import { generateUniqueId } from "../lib/utils"
 import type { Env } from "../types"
 import { rateLimitMiddleware } from "../middlewares"
+import { isCleanText } from "../lib/nsfw"
+import { HTTPException } from "hono/http-exception"
 
 const generateImageSchema = z.object({
   prompt: z
@@ -24,37 +26,49 @@ const app = new Hono<{ Bindings: Env }>().post(
   zValidator("json", generateImageSchema),
   rateLimitMiddleware("GENERATE_RATE_LIMITER"),
   async (c) => {
-    const body = c.req.valid("json")
-    const prompt = body.prompt
+    try {
+      const body = c.req.valid("json")
+      const prompt = body.prompt
 
-    const model = new HfInference(c.env.HUGGINGFACE_KEY)
+      await isCleanText({
+        text: prompt,
+        env: c.env,
+      })
 
-    const blobImage = (await model.request({
-      model: "alvdansen/littletinies",
-      inputs: body.prompt,
-    })) as Blob
+      const model = new HfInference(c.env.HUGGINGFACE_KEY)
 
-    const imageId = generateUniqueId()
-    const r2 = createS3Client(c.env)
+      const blobImage = (await model.request({
+        model: "alvdansen/littletinies",
+        inputs: body.prompt,
+      })) as Blob
 
-    const signedUrl = await getSignedUrl(
-      r2,
-      new PutObjectCommand({
-        Bucket: c.env.R2_BUCKET_NAME,
-        Key: `images/${imageId}.jpeg`,
-      }),
-      { expiresIn: 60 },
-    )
+      const imageId = generateUniqueId()
+      const r2 = createS3Client(c.env)
 
-    const uploadResponse = await fetch(signedUrl, {
-      method: "PUT",
-      body: blobImage,
-      headers: {
-        "Content-Type": blobImage.type,
-      },
-    })
+      const signedUrl = await getSignedUrl(
+        r2,
+        new PutObjectCommand({
+          Bucket: c.env.R2_BUCKET_NAME,
+          Key: `images/${imageId}.jpeg`,
+        }),
+        { expiresIn: 60 },
+      )
 
-    if (uploadResponse.ok) {
+      const uploadResponse = await fetch(signedUrl, {
+        method: "PUT",
+        body: blobImage,
+        headers: {
+          "Content-Type": blobImage.type,
+        },
+      })
+
+      if (!uploadResponse.ok) {
+        throw new HTTPException(500, {
+          message:
+            "Failed to upload image. Please try again or raise an issue on GitHub.",
+        })
+      }
+
       const db = dbClient(c.env)
 
       const embedding = await getEmbeddings({
@@ -69,14 +83,25 @@ const app = new Hono<{ Bindings: Env }>().post(
         prompt: prompt,
         embedding: embeddingBuffer,
       })
+
+      const imageArrayBuffer = await blobImage.arrayBuffer()
+
+      return c.body(imageArrayBuffer, 200, {
+        "Content-Type": "image/jpeg",
+        "Content-Disposition": `inline; filename="${prompt}.jpeg"`,
+      })
+    } catch (err) {
+      console.error(err)
+
+      if (err instanceof HTTPException) {
+        return err.getResponse()
+      }
+
+      throw new HTTPException(500, {
+        message:
+          "Unknown Generate Image error occurred. Please try again or raise an issue on GitHub.",
+      })
     }
-
-    const imageArrayBuffer = await blobImage.arrayBuffer()
-
-    return c.body(imageArrayBuffer, 200, {
-      "Content-Type": "image/jpeg",
-      "Content-Disposition": `inline; filename="${prompt}.jpeg"`,
-    })
   },
 )
 

@@ -27,6 +27,8 @@ const generateImage = async (prompt: string) => {
     json: { prompt },
   })
 
+  console.log({ response })
+
   if (!response.ok) {
     throw new Error("Network response was not ok")
   }
@@ -139,13 +141,11 @@ export function Generate() {
       setIsGenerating(true)
     },
     onSuccess: (imageUrl) => {
-      console.log("Image generated:", imageUrl)
       setImageSrc(imageUrl)
       setIsGenerating(false)
       showConfetti()
     },
     onError: (error) => {
-      console.error("Error generating image:", error)
       setIsGenerating(false)
     },
   })

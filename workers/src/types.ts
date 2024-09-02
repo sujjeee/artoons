@@ -10,6 +10,7 @@ export type Env = {
   R2_BUCKET_NAME: string
 
   NEXT_APP_URL: string
+  GROQ_API_KEY: string
 
   ROOT_RATE_LIMITER: any
   IMAGES_RATE_LIMITER: any

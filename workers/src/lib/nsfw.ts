@@ -46,7 +46,7 @@ export async function isCleanText({ env, text }: CheckTextProps) {
     console.error(error)
 
     if (error instanceof HTTPException) {
-      throw new HTTPException(500, {
+      throw new HTTPException(400, {
         message: error.message,
       })
     }

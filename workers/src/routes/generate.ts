@@ -90,11 +90,13 @@ const app = new Hono<{ Bindings: Env }>().post(
         "Content-Type": "image/jpeg",
         "Content-Disposition": `inline; filename="${prompt}.jpeg"`,
       })
-    } catch (err) {
-      console.error(err)
+    } catch (error) {
+      console.error(error)
 
-      if (err instanceof HTTPException) {
-        return err.getResponse()
+      if (error instanceof HTTPException) {
+        throw new HTTPException(400, {
+          message: error.message,
+        })
       }
 
       throw new HTTPException(500, {

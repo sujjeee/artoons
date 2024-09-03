@@ -1,5 +1,5 @@
-import { Context, Next } from "hono"
-import { Env } from "./types"
+import type { Context, Next } from "hono"
+import type { Env } from "./types"
 
 interface RateLimitMiddlewareProps {
   limit: number

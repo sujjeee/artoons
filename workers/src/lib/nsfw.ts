@@ -1,5 +1,5 @@
 import Groq from "groq-sdk"
-import { Env } from "../types"
+import type { Env } from "../types"
 
 import { HTTPException } from "hono/http-exception"
 

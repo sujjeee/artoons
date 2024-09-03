@@ -1,3 +1,5 @@
+import type { KVNamespace } from "@cloudflare/workers-types"
+
 export type Env = {
   DATABASE_URL: string
   DATABASE_AUTH_TOKEN: string

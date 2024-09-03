@@ -11,7 +11,7 @@ app.get(
   rateLimitMiddleware({
     identifier: "ROOT_RATE_LIMITER",
     duration: 60,
-    limit: 2,
+    limit: 100,
   }),
   (c) => {
     return c.text("Welcome to artoons!")

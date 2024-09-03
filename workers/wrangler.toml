@@ -7,4 +7,4 @@ port = 5000
 
 [[kv_namespaces]]
 binding = "RATE_LIMITER"
-id = "95e330e0b5a542bcbf5acc645bfd30c0"
+id = "5e25a92d3c764b0c93998c812451e283"

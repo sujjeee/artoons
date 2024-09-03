@@ -1,24 +1,19 @@
-import { Hono } from "hono";
+import { Hono } from "hono"
 
-import { generate } from "./routes/generate";
-import { image } from "./routes/images";
-import { rateLimitMiddleware } from "./middlewares";
+import { generate } from "./routes/generate"
+import { image } from "./routes/images"
 
-const app = new Hono();
+const app = new Hono()
 
 app.get(
   "/",
-  rateLimitMiddleware({
-    identifier: "ROOT_RATE_LIMITER",
-    duration: 60,
-    limit: 100,
-  }),
+
   (c) => {
-    return c.text("Welcome to artoons!");
-  }
-);
+    return c.text("Welcome to artoons!")
+  },
+)
 
-const routes = app.route("/images", image).route("/generate", generate);
+const routes = app.route("/images", image).route("/generate", generate)
 
-export type APIResponses = typeof routes;
-export default app;
+export type APIResponses = typeof routes
+export default app

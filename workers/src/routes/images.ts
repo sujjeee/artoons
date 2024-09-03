@@ -18,7 +18,11 @@ const app = new Hono<{ Bindings: Env }>()
   .get(
     "/",
     zValidator("query", queryImagesSchema),
-    rateLimitMiddleware("IMAGES_RATE_LIMITER"),
+    rateLimitMiddleware({
+      identifier: "IMAGES_RATE_LIMITER",
+      duration: 60,
+      limit: 100,
+    }),
     async (c) => {
       const query = c.req.query("query")
       const cursor = c.req.query("cursor")
@@ -87,21 +91,29 @@ const app = new Hono<{ Bindings: Env }>()
       })
     },
   )
-  .get("/random", rateLimitMiddleware("IMAGES_RATE_LIMITER"), async (c) => {
-    const count = 10
-    const db = dbClient(c.env)
+  .get(
+    "/random",
+    rateLimitMiddleware({
+      identifier: "IMAGES_RATE_LIMITER",
+      duration: 60,
+      limit: 100,
+    }),
+    async (c) => {
+      const count = 10
+      const db = dbClient(c.env)
 
-    const randomImages = await db.query.images.findMany({
-      columns: {
-        id: true,
-      },
-      limit: Number(count),
-      orderBy: sql`RANDOM()`,
-    })
+      const randomImages = await db.query.images.findMany({
+        columns: {
+          id: true,
+        },
+        limit: Number(count),
+        orderBy: sql`RANDOM()`,
+      })
 
-    return c.json({
-      data: randomImages,
-    })
-  })
+      return c.json({
+        data: randomImages,
+      })
+    },
+  )
 
 export { app as image }

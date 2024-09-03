@@ -6,9 +6,17 @@ import { rateLimitMiddleware } from "./middlewares"
 
 const app = new Hono()
 
-app.get("/", rateLimitMiddleware("ROOT_RATE_LIMITER"), (c) => {
-  return c.text("Welcome to artoons!")
-})
+app.get(
+  "/",
+  rateLimitMiddleware({
+    identifier: "ROOT_RATE_LIMITER",
+    duration: 60,
+    limit: 2,
+  }),
+  (c) => {
+    return c.text("Welcome to artoons!")
+  },
+)
 
 const routes = app.route("/images", image).route("/generate", generate)
 

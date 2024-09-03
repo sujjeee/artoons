@@ -24,7 +24,11 @@ const generateImageSchema = z.object({
 const app = new Hono<{ Bindings: Env }>().post(
   "/",
   zValidator("json", generateImageSchema),
-  rateLimitMiddleware("GENERATE_RATE_LIMITER"),
+  rateLimitMiddleware({
+    identifier: "GENERATE_RATE_LIMITER",
+    duration: 3600,
+    limit: 5,
+  }),
   async (c) => {
     try {
       const body = c.req.valid("json")

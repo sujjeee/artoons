@@ -12,7 +12,5 @@ export type Env = {
   NEXT_APP_URL: string
   GROQ_API_KEY: string
 
-  ROOT_RATE_LIMITER: any
-  IMAGES_RATE_LIMITER: any
-  GENERATE_RATE_LIMITER: any
+  RATE_LIMITER: KVNamespace
 }

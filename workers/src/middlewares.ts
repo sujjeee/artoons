@@ -1,17 +1,57 @@
 import { Context, Next } from "hono"
 import { Env } from "./types"
-import { HTTPException } from "hono/http-exception"
 
-export const rateLimitMiddleware = (rateLimiterKey: keyof Env) => {
+interface RateLimitMiddlewareProps {
+  limit: number
+  duration: number
+  identifier: string
+}
+
+export function rateLimitMiddleware({
+  limit,
+  duration,
+  identifier,
+}: RateLimitMiddlewareProps) {
   return async (c: Context<{ Bindings: Env }>, next: Next) => {
-    const ipAddress = c.req.header("cf-connecting-ip") || "127.0.0.1"
-    const rateLimiter = c.env[rateLimiterKey]
-    const { success } = await rateLimiter.limit({ key: ipAddress })
+    const ip =
+      c.req.header("x-vercel-forwarded-for") ||
+      c.req.header("CF-Connecting-IP") ||
+      "unknown-ip"
 
-    if (!success) {
-      throw new HTTPException(429, {
-        message: "Too many requests. Please try again later.",
-      })
+    const key = `${identifier}_${ip}`
+
+    const data = (await c.env.RATE_LIMITER.get(key, { type: "json" })) as {
+      count: number
+      lastRequestTime: number
+    } | null
+
+    const now = Date.now()
+
+    if (data) {
+      const { count, lastRequestTime } = data
+
+      // Reset the counter if the duration has passed
+      if (now - lastRequestTime > duration * 1000) {
+        await c.env.RATE_LIMITER.put(
+          key,
+          JSON.stringify({ count: 1, lastRequestTime: now }),
+        )
+      } else if (count < limit) {
+        // Increment the counter if within the rate limit
+        await c.env.RATE_LIMITER.put(
+          key,
+          JSON.stringify({ count: count + 1, lastRequestTime }),
+        )
+      } else {
+        // Rate limit exceeded
+        return c.text("Too many requests. Please try again later.", 429)
+      }
+    } else {
+      // Initialize counter for new IP
+      await c.env.RATE_LIMITER.put(
+        key,
+        JSON.stringify({ count: 1, lastRequestTime: now }),
+      )
     }
 
     await next()
